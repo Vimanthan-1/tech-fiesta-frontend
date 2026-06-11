@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, Trophy, Terminal, Compass, Target, Radio, Activity, Navigation } from "lucide-react";
+import { Anchor, Target, Cpu, Navigation, Radio, Activity } from "lucide-react";
 
 interface JourneyMapProps {
   activeSection: string;
@@ -18,7 +18,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       label: "About",
       title: "The Departure",
       description: "Explore the theme and origins of the Odyssey.",
-      icon: Info,
+      icon: Anchor,
       href: "#about",
       coords: { x: 125, y: 75, pctX: "12.5%", pctY: "25%" },
       mobileCoords: { x: 25, y: 80, pctX: "25%", pctY: "10%" },
@@ -35,7 +35,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       label: "Events",
       title: "The Trials",
       description: "Test your skills in competitive arenas.",
-      icon: Trophy,
+      icon: Target,
       href: "#events",
       coords: { x: 375, y: 225, pctX: "37.5%", pctY: "75%" },
       mobileCoords: { x: 75, y: 280, pctX: "75%", pctY: "35%" },
@@ -52,7 +52,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       label: "Workshops",
       title: "The Training",
       description: "Acquire wisdom from leading pioneers.",
-      icon: Terminal,
+      icon: Cpu,
       href: "#workshops",
       coords: { x: 625, y: 75, pctX: "62.5%", pctY: "25%" },
       mobileCoords: { x: 25, y: 480, pctX: "25%", pctY: "60%" },
@@ -69,7 +69,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       label: "Register",
       title: "The Legacy",
       description: "Secure your passage and cement your legacy.",
-      icon: Compass,
+      icon: Navigation,
       href: "/registration",
       coords: { x: 875, y: 225, pctX: "87.5%", pctY: "75%" },
       mobileCoords: { x: 75, y: 680, pctX: "75%", pctY: "85%" },
@@ -153,31 +153,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
           pointer-events: none;
         }
 
-        /* Floating sonar pulse along the SVG paths */
-        @keyframes travel-path {
-          0% { offset-distance: 0%; }
-          100% { offset-distance: 100%; }
-        }
-        .sonar-pulse-desktop {
-          width: 10px;
-          height: 10px;
-          background: #ef4444;
-          border-radius: 50%;
-          box-shadow: 0 0 12px #ef4444, 0 0 25px #ef4444, 0 0 40px #ef4444;
-          position: absolute;
-          offset-path: path("M 125 75 C 250 75, 250 225, 375 225 S 500 75, 625 75 S 750 225, 875 225");
-          animation: travel-path 10s linear infinite;
-        }
-        .sonar-pulse-mobile {
-          width: 8px;
-          height: 8px;
-          background: #ef4444;
-          border-radius: 50%;
-          box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444;
-          position: absolute;
-          offset-path: path("M 25 80 C 25 180, 75 180, 75 280 S 25 380, 25 480 S 75 580, 75 680");
-          animation: travel-path 7s linear infinite;
-        }
+
 
         /* Cyber CRT overlay lines */
         .crt-scanlines {
@@ -256,8 +232,6 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               className="animate-[dash_10s_linear_infinite]"
             />
           </svg>
-          {/* Glowing dot traveling along the path */}
-          <div className="sonar-pulse-desktop" />
         </div>
 
         {/* MOBILE SVG CONNECTION PATH */}
@@ -281,8 +255,6 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               className="animate-[dash_8s_linear_infinite]"
             />
           </svg>
-          {/* Glowing dot traveling along the path */}
-          <div className="sonar-pulse-mobile" />
         </div>
 
         {/* Milestone Nodes */}
