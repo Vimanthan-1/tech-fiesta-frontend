@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Anchor, Target, Cpu, Navigation, Radio, Activity } from "lucide-react";
+import { Anchor, Target, Cpu, Navigation, Radio, Activity, ShieldAlert, Cpu as CpuIcon } from "lucide-react";
 
 interface JourneyMapProps {
   activeSection: string;
@@ -11,6 +11,12 @@ interface JourneyMapProps {
 
 export default function JourneyMap({ activeSection, onSectionChange }: JourneyMapProps) {
   const [hoveredStep, setHoveredStep] = useState<string | null>(null);
+  const [hexLogs, setHexLogs] = useState<string[]>([
+    "[SYS] STATUS: STANDBY",
+    "[TRK] LOCK_BRG: 000.0°",
+    "[SYS] VOLTAGE_OK: 1.25V",
+    "[VEC] SCANNING SECTOR_ODY",
+  ]);
 
   const steps = [
     {
@@ -22,6 +28,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       href: "#about",
       coords: { x: 125, y: 75, pctX: "12.5%", pctY: "25%" },
       mobileCoords: { x: 25, y: 80, pctX: "25%", pctY: "10%" },
+      radarCoords: { cx: 35, cy: 35 },
       telemetry: {
         vector: "VEC-ODY: 0x01",
         bearing: "044.2° NNE",
@@ -39,6 +46,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       href: "#events",
       coords: { x: 375, y: 225, pctX: "37.5%", pctY: "75%" },
       mobileCoords: { x: 75, y: 280, pctX: "75%", pctY: "35%" },
+      radarCoords: { cx: 65, cy: 70 },
       telemetry: {
         vector: "VEC-ODY: 0x02",
         bearing: "112.5° ESE",
@@ -56,6 +64,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       href: "#workshops",
       coords: { x: 625, y: 75, pctX: "62.5%", pctY: "25%" },
       mobileCoords: { x: 25, y: 480, pctX: "25%", pctY: "60%" },
+      radarCoords: { cx: 70, cy: 30 },
       telemetry: {
         vector: "VEC-ODY: 0x03",
         bearing: "215.1° SSW",
@@ -73,6 +82,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       href: "/registration",
       coords: { x: 875, y: 225, pctX: "87.5%", pctY: "75%" },
       mobileCoords: { x: 75, y: 680, pctX: "75%", pctY: "85%" },
+      radarCoords: { cx: 85, cy: 65 },
       telemetry: {
         vector: "VEC-ODY: 0x04",
         bearing: "318.9° NW",
@@ -82,6 +92,32 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       },
     },
   ];
+
+  // Random log generator to simulate live tech feedback
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const prefixes = ["[SYS]", "[TRK]", "[VEC]", "[ODY]", "[LOCK]"];
+      const messages = [
+        "SIG_STR: 98.4%",
+        "SECTOR_LOCK: TRUE",
+        "TEMP_STABLE: 44.2°C",
+        "GRID_DEC_KEY: 0xFD4A",
+        "SYS_TICK: OK",
+        "DATA_STREAM: OPEN",
+        "SYNCING CORE...",
+        "DECRYPT_PASS: 99.69%",
+      ];
+      const randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+      const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+      
+      setHexLogs((prev) => {
+        const next = [...prev.slice(1), `${randomPrefix} ${randomMsg}`];
+        return next;
+      });
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const currentHoverData = steps.find((step) => step.id === hoveredStep);
 
@@ -108,6 +144,15 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
             left: var(--x-desktop);
             top: var(--y-desktop);
           }
+        }
+
+        /* Equalizer visualizer bounce */
+        @keyframes equalizer-bounce {
+          0%, 100% { height: 4px; }
+          50% { height: var(--max-height, 16px); }
+        }
+        .audio-bar {
+          animation: equalizer-bounce var(--bounce-duration, 1s) ease-in-out infinite;
         }
         
         /* Tactical grid background */
@@ -153,12 +198,20 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
           pointer-events: none;
         }
 
-
-
         /* Cyber CRT overlay lines */
         .crt-scanlines {
           background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
           background-size: 100% 4px;
+        }
+
+        /* Radar sweep animation inside scope */
+        @keyframes radar-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .radar-scope-line {
+          animation: radar-spin 3s linear infinite;
+          transform-origin: 50px 50px;
         }
       `}</style>
 
@@ -345,61 +398,157 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
         })}
       </div>
 
-      {/* 4. REAL-TIME TELEMETRY PANEL (Fills bottom map viewport area) */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto mt-6 bg-black/85 border border-red-500/20 rounded-xl p-4 font-mono text-xs text-red-400 shadow-[0_4px_25px_rgba(0,0,0,0.7)] backdrop-blur-md">
-        <div className="flex items-center gap-2 border-b border-red-500/10 pb-2 mb-3">
-          <Activity className="w-4 h-4 text-red-500 animate-[pulse_1.5s_infinite]" />
-          <span className="font-bold uppercase tracking-wider text-[10px] sm:text-xs text-red-500">
-            ODY-SYSTEMS TELEMETRY CONSOLE
-          </span>
-          <span className="ml-auto text-[9px] text-red-500/60 uppercase">
-            STATUS: [ MONITORING ]
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-[10px] sm:text-xs">
-          <div>
-            <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// LOCKED POINT</span>
-            <span className="text-white font-bold uppercase">
-              {currentHoverData ? currentHoverData.label : "SCANNING..."}
-            </span>
+      {/* 4. UPGRADED футуристический HUD TELEMETRY PANEL */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto mt-12 bg-black/90 border-2 border-red-500/35 rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(239,68,68,0.15)] backdrop-blur-lg">
+        {/* Glowing border outline */}
+        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-red-500/80 to-transparent" />
+        
+        {/* Top Header Bar */}
+        <div className="bg-red-950/30 px-4 py-2 border-b border-red-500/20 flex items-center justify-between text-[10px] sm:text-xs text-red-500 font-mono">
+          <div className="flex gap-2 items-center">
+            <Radio className="w-3.5 h-3.5 animate-[pulse_1s_infinite] text-red-500" />
+            <span className="font-bold tracking-[0.15em] uppercase">SYSTEMS TELEMETRY & TARGETING CONSOLE</span>
           </div>
-          <div>
-            <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// BEARING LOCK</span>
-            <span className="text-white font-mono">
-              {currentHoverData ? currentHoverData.telemetry.bearing : "0.0.0.0° SCAN"}
-            </span>
-          </div>
-          <div>
-            <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// COORDINATES</span>
-            <span className="text-white font-mono">
-              {currentHoverData ? currentHoverData.telemetry.loc : "WAITING FOR RETRIEVAL..."}
-            </span>
-          </div>
-          <div>
-            <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// VECTOR TARGET</span>
-            <span className="text-white font-mono uppercase">
-              {currentHoverData ? currentHoverData.telemetry.vector : "STANDBY_"}
+          <div className="flex items-center gap-4">
+            <span className="opacity-60 hidden sm:inline">SYS_VER: 2.0.44</span>
+            <span className="bg-red-950 border border-red-500/40 rounded px-1.5 py-0.5 text-red-500/80 font-bold uppercase tracking-wider animate-pulse">
+              {currentHoverData ? "TARGET LOCK" : "SCANNING"}
             </span>
           </div>
         </div>
 
-        <div className="mt-3 pt-2 border-t border-red-500/10 flex flex-wrap gap-2 items-center text-[9px] text-red-500/60">
-          <span className="flex items-center gap-1">
-            <Radio className="w-3 h-3 text-red-500 animate-pulse" />
-            RADAR SCAN: ACTIVE
-          </span>
-          <span className="hidden sm:inline">//</span>
-          <span className="flex items-center gap-1">
-            <Target className="w-3 h-3 text-red-500" />
-            TARGET LOCK: {currentHoverData ? "LOCKED" : "WAITING"}
-          </span>
-          <span className="ml-auto font-bold text-red-500/90 text-[10px]">
-            {currentHoverData 
-              ? `COURSE RESOLVED: ${currentHoverData.telemetry.progress}` 
-              : "ACQUIRING SIGNAL..."
-            }
-          </span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-5 font-mono text-xs text-red-400">
+          
+          {/* A. RADAR SCOPE WIDGET (Col span 3) */}
+          <div className="lg:col-span-3 flex flex-col items-center justify-center border-r border-red-500/10 pr-0 lg:pr-6 relative">
+            <div className="absolute top-0 left-0 text-[8px] text-red-500/40 tracking-wider">// RADAR_FEED</div>
+            
+            {/* SVG Interactive Radar Scope */}
+            <div className="w-24 h-24 rounded-full border border-red-500/30 bg-red-950/5 relative overflow-hidden flex items-center justify-center mt-2 shadow-[inset_0_0_15px_rgba(239,68,68,0.1)]">
+              <svg className="w-full h-full" viewBox="0 0 100 100">
+                {/* Concentric radar lines */}
+                <circle cx="50" cy="50" r="45" stroke="rgba(239, 68, 68, 0.15)" strokeWidth="0.5" fill="none" />
+                <circle cx="50" cy="50" r="30" stroke="rgba(239, 68, 68, 0.15)" strokeWidth="0.5" fill="none" />
+                <circle cx="50" cy="50" r="15" stroke="rgba(239, 68, 68, 0.15)" strokeWidth="0.5" fill="none" />
+                {/* Crosshairs */}
+                <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(239, 68, 68, 0.1)" strokeWidth="0.5" />
+                <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(239, 68, 68, 0.1)" strokeWidth="0.5" />
+                
+                {/* Sweep line */}
+                <line x1="50" y1="50" x2="50" y2="5" stroke="rgba(239, 68, 68, 0.5)" strokeWidth="1" className="radar-scope-line" />
+                
+                {/* Display dots for all steps */}
+                {steps.map((step) => {
+                  const isThisActive = hoveredStep === step.id || activeSection === step.id;
+                  return (
+                    <g key={step.id}>
+                      <circle
+                        cx={step.radarCoords.cx}
+                        cy={step.radarCoords.cy}
+                        r={isThisActive ? "2.5" : "1.5"}
+                        fill={isThisActive ? "#ef4444" : "rgba(239, 68, 68, 0.4)"}
+                        className={isThisActive ? "animate-[pulse_1s_infinite]" : ""}
+                      />
+                      {isThisActive && (
+                        <circle
+                          cx={step.radarCoords.cx}
+                          cy={step.radarCoords.cy}
+                          r="4"
+                          stroke="#ef4444"
+                          strokeWidth="0.5"
+                          fill="none"
+                          className="animate-ping"
+                          style={{ animationDuration: "1.5s" }}
+                        />
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+            <span className="text-[8px] text-red-500/60 font-mono tracking-widest mt-2 uppercase">ANT_SIG_LOCK: 98%</span>
+          </div>
+
+          {/* B. TELEMETRY FIELDS & WAVEFORM (Col span 6) */}
+          <div className="lg:col-span-6 flex flex-col justify-between py-1 border-r border-red-500/10 pr-0 lg:pr-6 relative">
+            <div className="absolute top-0 left-0 text-[8px] text-red-500/40 tracking-wider">// VECTOR_READOUTS</div>
+            
+            <div className="grid grid-cols-2 gap-4 mt-4 text-[10px] sm:text-xs">
+              <div className="bg-red-950/15 border border-red-500/10 rounded p-2">
+                <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// LOCKED POINT</span>
+                <span className="text-white font-bold uppercase tracking-wider">
+                  {currentHoverData ? currentHoverData.label : "SCANNING..."}
+                </span>
+              </div>
+              <div className="bg-red-950/15 border border-red-500/10 rounded p-2">
+                <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// BEARING LOCK</span>
+                <span className="text-white font-mono font-semibold">
+                  {currentHoverData ? currentHoverData.telemetry.bearing : "0.00° VECTOR_STBY"}
+                </span>
+              </div>
+              <div className="bg-red-950/15 border border-red-500/10 rounded p-2">
+                <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// COORDINATES</span>
+                <span className="text-white font-mono break-all font-semibold">
+                  {currentHoverData ? currentHoverData.telemetry.loc : "ACQUIRING..."}
+                </span>
+              </div>
+              <div className="bg-red-950/15 border border-red-500/10 rounded p-2">
+                <span className="text-red-500/50 block text-[9px] uppercase tracking-wide">// VECTOR TARGET</span>
+                <span className="text-white font-mono uppercase font-semibold">
+                  {currentHoverData ? currentHoverData.telemetry.vector : "GRID_LOCK: OFF"}
+                </span>
+              </div>
+            </div>
+
+            {/* Signal Waveform Indicator */}
+            <div className="mt-4 flex items-center gap-3">
+              <span className="text-[9px] text-red-500/40 font-mono tracking-widest uppercase">// SIG_WAVE</span>
+              
+              {/* Dynamic Equalizer / Audio visualizer bars */}
+              <div className="flex items-end gap-1 h-5 flex-grow">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((bar) => {
+                  const duration = 0.4 + Math.random() * 0.6;
+                  const maxHeight = 8 + Math.random() * 10;
+                  return (
+                    <div
+                      key={bar}
+                      className="audio-bar w-full bg-red-600/60 rounded-t-xs"
+                      style={{
+                        "--max-height": `${maxHeight}px`,
+                        "--bounce-duration": `${duration}s`,
+                      } as React.CSSProperties}
+                    />
+                  );
+                })}
+              </div>
+              <span className="text-[9px] font-mono text-red-500/80 font-bold">
+                {currentHoverData ? `LOCK_SIG: ${currentHoverData.telemetry.progress}` : "ACQUIRING..."}
+              </span>
+            </div>
+          </div>
+
+          {/* C. LIVE STATUS LOGS / DATA STREAM (Col span 3) */}
+          <div className="lg:col-span-3 pl-0 lg:pl-6 flex flex-col justify-between py-1 relative">
+            <div className="absolute top-0 left-0 text-[8px] text-red-500/40 tracking-wider">// CODE_STREAM</div>
+            
+            <div className="bg-red-950/10 border border-red-500/10 rounded p-2.5 h-28 overflow-hidden font-mono text-[9px] leading-normal text-red-500/60 mt-4 flex flex-col gap-0.5">
+              {hexLogs.map((log, index) => (
+                <div key={index} className="flex justify-between font-mono">
+                  <span>{log}</span>
+                  <span className="text-red-500/30">0x{Math.floor(Math.random() * 256).toString(16).toUpperCase()}</span>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-3 flex items-center justify-between text-[8px] text-red-500/50 uppercase tracking-widest font-mono">
+              <span>CORE: ACTIVE</span>
+              <span className="flex items-center gap-1 font-bold text-red-500">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                LIVE FEED
+              </span>
+            </div>
+          </div>
+
         </div>
       </div>
 
