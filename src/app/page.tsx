@@ -195,6 +195,9 @@ export default function Home() {
                       exit={{ opacity: 0, y: -15 }}
                       transition={{ duration: 0.35, ease: "easeInOut" }}
                       className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-200px)] py-4 sm:py-8 relative px-4 gap-12"
+                      style={{
+                        cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\' fill=\'none\' stroke=\'%23ef4444\' stroke-width=\'1.5\'><circle cx=\'16\' cy=\'16\' r=\'6\'/><line x1=\'16\' y1=\'2\' x2=\'16\' y2=\'10\'/><line x1=\'16\' y1=\'22\' x2=\'16\' y2=\'30\'/><line x1=\'2\' y1=\'16\' x2=\'10\' y2=\'16\'/><line x1=\'22\' y1=\'16\' x2=\'30\' y2=\'16\'/></svg>") 16 16, crosshair'
+                      }}
                     >
                       {/* Cyberpunk corner brackets */}
                       <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-red-500/40 pointer-events-none" />
@@ -261,7 +264,7 @@ export default function Home() {
                           <CountdownTimer />
                         </div>
                         
-                        {/* Center: Tech HUD divider (visible on md and up) */}
+                        {/* Center Column: Original Tech HUD divider (visible on xl and up) */}
                         <div className="hidden xl:flex flex-col items-center justify-center gap-5 text-red-500/40 font-mono text-[9px] tracking-[0.25em] uppercase select-none px-4 relative min-w-[120px] animate-[fadeIn_1s_ease-out_forwards] delay-1000">
                           <div className="text-[10px] text-red-500 animate-pulse font-bold tracking-[0.1em]">[ SYSTEM ]</div>
                           <div className="w-px h-12 bg-gradient-to-b from-transparent via-red-500/30 to-transparent" />
@@ -278,12 +281,12 @@ export default function Home() {
                           <div className="flex flex-col gap-1 items-center leading-normal">
                             <span>STATUS: ONLINE</span>
                             <span>LOAD: 98.4%</span>
-                            <span>PORT: 3001</span>
+                            <span>PORT: 3002</span>
                           </div>
                           <div className="w-px h-12 bg-gradient-to-b from-transparent via-red-500/30 to-transparent" />
                           <div className="text-[10px] text-red-500 animate-pulse font-bold tracking-[0.1em]">[ TELEMETRY ]</div>
                         </div>
-                        
+
                         {/* Right side: Spartan Poster */}
                         <div className="flex-1 min-w-[140px] sm:min-w-[240px] md:min-w-[380px] lg:min-w-[320px] max-w-[170px] sm:max-w-[280px] md:max-w-[480px] lg:max-w-[420px] relative z-10 character-float select-none animate-[fadeIn_1.2s_ease-out_forwards]">
                           {/* Outer glowing backlight red aura */}
