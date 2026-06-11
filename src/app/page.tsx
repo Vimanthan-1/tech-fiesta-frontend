@@ -320,7 +320,7 @@ export default function Home() {
                           Theme: The Odyssey
                         </h3>
                         <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 leading-relaxed text-gray-300">
-                          Embark on an epic voyage of innovation, challenge, and triumph at Tech Fiesta 2.0: The Odyssey. Inspired by the ancient journey of Odysseus, this year&apos;s festival is a grand expedition navigating the frontiers of modern technology, game development, cybersecurity, AI, and creative design. Join innovators and creators from around the world as curiosity becomes innovation, and innovation becomes legacy.
+                          TECH FIESTA&apos;26 is the flagship annual technical festival of the Asymmetric Club, hosted at Chennai Institute of Technology. This electrifying one-day event brings together innovators, developers, creators, and tech enthusiasts to explore the latest advancements in technology. With exciting workshops, competitions, keynote sessions, and hands-on experiences, Tech Fiesta&apos;26 is designed to inspire innovation, foster collaboration, and empower the next generation of tech leaders.
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
                           <GlareHover
