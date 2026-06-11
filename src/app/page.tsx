@@ -14,6 +14,7 @@ import WorkshopGrid from "@/components/WorkshopGrid";
 import GlareHover from "@/components/ReactBits/GlareHover/GlareHover";
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
+import JourneyMap from "@/components/JourneyMap";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -193,7 +194,7 @@ export default function Home() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -15 }}
                       transition={{ duration: 0.35, ease: "easeInOut" }}
-                      className="w-full flex items-center justify-center min-h-[calc(100vh-200px)] py-4 sm:py-8 relative px-4"
+                      className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-200px)] py-4 sm:py-8 relative px-4 gap-12"
                     >
                       {/* Cyberpunk corner brackets */}
                       <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-red-500/40 pointer-events-none" />
@@ -300,6 +301,9 @@ export default function Home() {
                           </div>
                         </div>
                       </div>
+
+                      {/* Journey Map Navigation */}
+                      <JourneyMap activeSection={activeSection} onSectionChange={setActiveSection} />
                     </motion.div>
                   )}
 

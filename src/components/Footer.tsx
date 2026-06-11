@@ -17,7 +17,7 @@ const Footer: React.FC<FooterProps> = ({
   const [consoleOutput, setConsoleOutput] = useState<string[]>([
     "\"We operate in the shadows to serve the light. We are Asymmetric.\"",
     "STATUS: DEAD // DEC_KEY_LOCK: 99.69%",
-    "SYSTEM: BLUE LABEL GIVES YOU WINGS",
+    "SYSTEM: Bluelabel users don't explain themselves. Neither does their config.",
   ]);
   const outputEndRef = useRef<HTMLDivElement>(null);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
