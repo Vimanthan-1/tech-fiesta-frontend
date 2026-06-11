@@ -25,6 +25,39 @@ export default function Home() {
   const [isMatrixActive, setIsMatrixActive] = useState(false);
   const [isSelfDestructing, setIsSelfDestructing] = useState(false);
   const [selfDestructCount, setSelfDestructCount] = useState(5);
+  const [touchPos, setTouchPos] = useState<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        setTouchPos({ x: touch.clientX, y: touch.clientY });
+      }
+    };
+    
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        setTouchPos({ x: touch.clientX, y: touch.clientY });
+      }
+    };
+    
+    const handleTouchEnd = () => {
+      setTouchPos(null);
+    };
+
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isSelfDestructing) return;
@@ -479,6 +512,46 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Mobile Touch Target Cursor Simulation */}
+      <AnimatePresence>
+        {touchPos && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0, rotate: -45 }}
+            animate={{ scale: 1.1, opacity: 1, rotate: 0 }}
+            exit={{ scale: 0, opacity: 0, rotate: 45 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="fixed z-[9999] pointer-events-none -translate-x-1/2 -translate-y-1/2 flex items-center gap-3"
+            style={{
+              left: touchPos.x,
+              top: touchPos.y,
+            }}
+          >
+            {/* The Target Icon with Glow */}
+            <div className="relative w-12 h-12 flex items-center justify-center">
+              {/* Outer pulsing ring */}
+              <div className="absolute inset-0 border border-red-500/20 rounded-full animate-ping" />
+              {/* Rotating corner brackets */}
+              <div className="absolute inset-0 border border-red-500/40 rounded-full border-t-transparent border-b-transparent animate-[spin_3s_linear_infinite]" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#ef4444" strokeWidth="1.5" className="filter drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]">
+                <circle cx="18" cy="18" r="6" strokeDasharray="2 2" className="animate-[spin_8s_linear_infinite_reverse]" />
+                <circle cx="18" cy="18" r="2" fill="#ef4444" />
+                <line x1="18" y1="2" x2="18" y2="8" />
+                <line x1="18" y1="28" x2="18" y2="34" />
+                <line x1="2" y1="18" x2="8" y2="18" />
+                <line x1="28" y1="18" x2="34" y2="18" />
+              </svg>
+            </div>
+            
+            {/* Telemetry data showing next to cursor */}
+            <div className="flex flex-col font-mono text-[8px] text-red-500 bg-black/60 border border-red-500/30 px-1.5 py-0.5 rounded backdrop-blur-sm shadow-[0_2px_10px_rgba(0,0,0,0.5)] select-none">
+              <span>X: {Math.round(touchPos.x)}</span>
+              <span>Y: {Math.round(touchPos.y)}</span>
+              <span className="text-[6px] text-red-400 animate-pulse font-bold">SYS_TRACK</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
