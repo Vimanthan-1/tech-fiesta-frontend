@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Anchor, Target, Cpu, Navigation } from "lucide-react";
+import { Anchor, Target, Cpu, Navigation, Mail } from "lucide-react";
 
 interface JourneyMapProps {
   activeSection: string;
@@ -20,14 +20,14 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       description: "Explore the theme and origins of the Odyssey.",
       icon: Anchor,
       href: "#about",
-      coords: { x: 125, y: 54, pctX: "12.5%", pctY: "18%" },
-      mobileCoords: { x: 25, y: 56, pctX: "25%", pctY: "10%" },
-      radarCoords: { cx: 35, cy: 35 },
+      coords: { x: 100, y: 54, pctX: "10%", pctY: "18%" },
+      mobileCoords: { x: 25, y: 56, pctX: "25%", pctY: "8%" },
+      radarCoords: { cx: 30, cy: 30 },
       telemetry: {
         vector: "VEC-ODY: 0x01",
         bearing: "044.2° NNE",
         status: "ACTIVE_ROUTE",
-        progress: "25%",
+        progress: "20%",
         loc: "12.8256° N, 80.0398° E",
       },
     },
@@ -38,14 +38,14 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       description: "Test your skills in competitive arenas.",
       icon: Target,
       href: "#events",
-      coords: { x: 375, y: 174, pctX: "37.5%", pctY: "58%" },
-      mobileCoords: { x: 75, y: 173, pctX: "75%", pctY: "31%" },
-      radarCoords: { cx: 65, cy: 70 },
+      coords: { x: 300, y: 174, pctX: "30%", pctY: "58%" },
+      mobileCoords: { x: 75, y: 173, pctX: "75%", pctY: "25%" },
+      radarCoords: { cx: 50, cy: 70 },
       telemetry: {
         vector: "VEC-ODY: 0x02",
         bearing: "112.5° ESE",
         status: "READY_STANDBY",
-        progress: "50%",
+        progress: "40%",
         loc: "12.8259° N, 80.0401° E",
       },
     },
@@ -56,15 +56,33 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       description: "Acquire wisdom from leading pioneers.",
       icon: Cpu,
       href: "#workshops",
-      coords: { x: 625, y: 54, pctX: "62.5%", pctY: "18%" },
-      mobileCoords: { x: 25, y: 291, pctX: "25%", pctY: "52%" },
-      radarCoords: { cx: 70, cy: 30 },
+      coords: { x: 500, y: 54, pctX: "50%", pctY: "18%" },
+      mobileCoords: { x: 25, y: 291, pctX: "25%", pctY: "42%" },
+      radarCoords: { cx: 65, cy: 30 },
       telemetry: {
         vector: "VEC-ODY: 0x03",
         bearing: "215.1° SSW",
         status: "READY_STANDBY",
-        progress: "75%",
+        progress: "60%",
         loc: "12.8262° N, 80.0404° E",
+      },
+    },
+    {
+      id: "contact",
+      label: "Contact",
+      title: "The Alliance",
+      description: "Establish transmission with the command center.",
+      icon: Mail,
+      href: "#contact",
+      coords: { x: 700, y: 174, pctX: "70%", pctY: "58%" },
+      mobileCoords: { x: 75, y: 414, pctX: "75%", pctY: "59%" },
+      radarCoords: { cx: 75, cy: 70 },
+      telemetry: {
+        vector: "VEC-ODY: 0x04",
+        bearing: "280.4° WNW",
+        status: "READY_STANDBY",
+        progress: "80%",
+        loc: "12.8263° N, 80.0405° E",
       },
     },
     {
@@ -73,12 +91,12 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
       title: "The Legacy",
       description: "Secure your passage and cement your legacy.",
       icon: Navigation,
-      href: "/registration",
-      coords: { x: 875, y: 174, pctX: "87.5%", pctY: "58%" },
-      mobileCoords: { x: 75, y: 414, pctX: "75%", pctY: "74%" },
-      radarCoords: { cx: 85, cy: 65 },
+      href: "#register",
+      coords: { x: 900, y: 54, pctX: "90%", pctY: "18%" },
+      mobileCoords: { x: 25, y: 532, pctX: "25%", pctY: "76%" },
+      radarCoords: { cx: 85, cy: 30 },
       telemetry: {
-        vector: "VEC-ODY: 0x04",
+        vector: "VEC-ODY: 0x05",
         bearing: "318.9° NW",
         status: "FINAL_LOCK",
         progress: "100%",
@@ -87,25 +105,16 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
     },
   ];
 
-
-
   const currentHoverData = steps.find((step) => step.id === hoveredStep);
 
   const handleStepClick = (href: string, id: string) => {
-    if (href.startsWith("/")) {
-      window.location.href = href;
-    } else {
-      onSectionChange(id);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    onSectionChange(id);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div 
       className="w-full py-12 px-4 relative overflow-hidden select-none mt-24 sm:mt-36 lg:mt-52 xl:mt-64"
-      style={{
-        cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\' fill=\'none\' stroke=\'%23ef4444\' stroke-width=\'1.5\'><circle cx=\'16\' cy=\'16\' r=\'6\'/><line x1=\'16\' y1=\'2\' x2=\'16\' y2=\'10\'/><line x1=\'16\' y1=\'22\' x2=\'16\' y2=\'30\'/><line x1=\'2\' y1=\'16\' x2=\'10\' y2=\'16\'/><line x1=\'22\' y1=\'16\' x2=\'30\' y2=\'16\'/></svg>") 16 16, crosshair'
-      }}
     >
       
       {/* 1. Root styled-jsx configuration block */}
@@ -217,6 +226,15 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
           <text x="89" y="52" fill="rgba(239, 68, 68, 0.4)" fontSize="5">E</text>
           <text x="7" y="52" fill="rgba(239, 68, 68, 0.4)" fontSize="5">W</text>
         </svg>
+
+        {/* Secret Coding Brackets watermark (large, centered, very low opacity) */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] opacity-[0.035] pointer-events-none mix-blend-screen bg-contain bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: "url('/secret_brackets.jpg')",
+            filter: "invert(1) brightness(0.95)" 
+          }}
+        />
       </div>
 
       {/* Decorative lat/long grid markings */}
@@ -254,22 +272,30 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               </filter>
             </defs>
             {/* Background static dashed path */}
-            <path
-              d="M 125 54 C 250 54, 250 174, 375 174 S 500 54, 625 54 S 750 174, 875 174"
+            <motion.path
+              d="M 100 54 C 200 54, 200 174, 300 174 S 400 54, 500 54 S 600 174, 700 174 S 800 54, 900 54"
               fill="none"
               stroke="rgba(239, 68, 68, 0.15)"
               strokeWidth="2"
               strokeDasharray="8 6"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
             />
             {/* Animated glowing overlay path */}
-            <path
-              d="M 125 54 C 250 54, 250 174, 375 174 S 500 54, 625 54 S 750 174, 875 174"
+            <motion.path
+              d="M 100 54 C 200 54, 200 174, 300 174 S 400 54, 500 54 S 600 174, 700 174 S 800 54, 900 54"
               fill="none"
               stroke="rgba(239, 68, 68, 0.85)"
               strokeWidth="2.5"
               strokeDasharray="25 150"
               className="animate-[dash_10s_linear_infinite]"
               filter="url(#path-glow)"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
             />
           </svg>
         </div>
@@ -287,22 +313,30 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               </filter>
             </defs>
             {/* Background static dashed path */}
-            <path
-              d="M 25 56 C 25 114.5, 75 114.5, 75 173 S 25 232, 25 291 S 75 352.5, 75 414"
+            <motion.path
+              d="M 25 56 C 25 114.5, 75 114.5, 75 173 S 25 232, 25 291 S 75 352.5, 75 414 S 25 473, 25 532"
               fill="none"
               stroke="rgba(239, 68, 68, 0.15)"
               strokeWidth="2"
               strokeDasharray="8 6"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
             />
             {/* Animated glowing overlay path */}
-            <path
-              d="M 25 56 C 25 114.5, 75 114.5, 75 173 S 25 232, 25 291 S 75 352.5, 75 414"
+            <motion.path
+              d="M 25 56 C 25 114.5, 75 114.5, 75 173 S 25 232, 25 291 S 75 352.5, 75 414 S 25 473, 25 532"
               fill="none"
               stroke="rgba(239, 68, 68, 0.85)"
               strokeWidth="2.5"
               strokeDasharray="30 250"
               className="animate-[dash_8s_linear_infinite]"
               filter="url(#path-glow-mobile)"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: false }}
+              transition={{ duration: 1.8, ease: "easeInOut" }}
             />
           </svg>
         </div>
@@ -314,8 +348,12 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
           const isHovered = hoveredStep === step.id;
 
           return (
-            <div
+            <motion.div
               key={step.id}
+              initial={{ opacity: 0, scale: 0.75, y: 40 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: false, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
               className="milestone-node absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 z-10"
               style={{
                 "--x-mobile": step.mobileCoords.pctX,
@@ -358,9 +396,6 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
                       ? "bg-red-950/50 border-red-500 shadow-[0_0_25px_rgba(239,68,68,0.45),inset_0_0_10px_rgba(239,68,68,0.3)]"
                       : "bg-black/95 border-red-500/30 hover:border-red-500/80 hover:shadow-[0_0_20px_rgba(239,68,68,0.25)]"
                   }`}
-                  style={{
-                    cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\' fill=\'none\' stroke=\'%23ef4444\' stroke-width=\'1.5\'><circle cx=\'16\' cy=\'16\' r=\'6\'/><line x1=\'16\' y1=\'2\' x2=\'16\' y2=\'10\'/><line x1=\'16\' y1=\'22\' x2=\'16\' y2=\'30\'/><line x1=\'2\' y1=\'16\' x2=\'10\' y2=\'16\'/><line x1=\'22\' y1=\'16\' x2=\'30\' y2=\'16\'/></svg>") 16 16, pointer'
-                  }}
                 >
                   {/* Glowing background ring */}
                   <span className={`absolute inset-0 rounded-full border border-red-500/20 animate-ping opacity-70 ${
@@ -396,7 +431,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>

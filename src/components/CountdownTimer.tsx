@@ -59,7 +59,7 @@ const CountdownTimer: React.FC = () => {
   ];
 
   return (
-    <div className="flex items-end gap-1.5 sm:gap-4 select-none mt-4 sm:mt-8 animate-[fadeIn_1.2s_ease-out_forwards] delay-1000">
+    <div className="flex items-end gap-1.5 sm:gap-4 select-none mt-4 sm:mt-8 animate-fade-in anim-delay-1000">
       <style jsx>{`
         .timer-box {
           background: rgba(10, 3, 3, 0.85);

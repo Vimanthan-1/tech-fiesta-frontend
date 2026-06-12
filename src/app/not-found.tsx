@@ -138,7 +138,7 @@ export default function NotFound() {
               <div className="flex items-center justify-center space-x-4">
                 <div className="text-2xl font-bold text-white">
                   {isRedirecting ? (
-                    <span className="text-green-400">REDIRECTING...</span>
+                    <span className="text-red-500 font-bold">REDIRECTING...</span>
                   ) : (
                     <span>{timeLeft}s</span>
                   )}
@@ -200,7 +200,7 @@ export default function NotFound() {
           {/* Tech-themed footer message */}
           <div className="mt-8 text-center">
             <p className="text-gray-500 text-sm">
-              <code className="bg-gray-800/50 px-2 py-1 rounded text-green-400">
+              <code className="bg-gray-800/50 px-2 py-1 rounded text-red-400">
                 if (lost) &#123; return home(); &#125;
               </code>
             </p>

@@ -1,27 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  variable: "--font-bebas-neue",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Tech Fiesta 2.0 - The Odyssey",
   description: "A Fest filled with knowledge and innovation",
+  icons: {
+    icon: "/secret_brackets.jpg",
+    shortcut: "/secret_brackets.jpg",
+    apple: "/secret_brackets.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -30,9 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} antialiased`}
+        className="antialiased"
       >
         {children}
         <Toaster 
@@ -50,3 +38,4 @@ export default function RootLayout({
     </html>
   );
 }
+
