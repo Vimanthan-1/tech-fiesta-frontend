@@ -33,6 +33,13 @@ export async function checkDuplicateRegistration(
   email: string,
   whatsapp: string
 ): Promise<DuplicateCheck> {
+  if (!db) {
+    console.warn("Firebase is not configured. Mocking duplicate check.");
+    return {
+      exists: false,
+      duplicateFields: [],
+    };
+  }
   try {
     const registrationsRef = collection(db, "registrations");
 
@@ -91,6 +98,15 @@ export async function submitRegistration(
   try {
     // Generate unique IDs
     const registrationId = `TF-ODYSSEY-${uuidv4().substr(0, 8).toUpperCase()}`;
+
+    if (!db) {
+      console.warn("Firebase is not configured. Mocking registration submission.");
+      return {
+        success: true,
+        registrationId,
+        message: `[MOCK] Registration submitted successfully! Your registration ID is ${registrationId}. Please save this for future reference.`,
+      };
+    }
 
     // Check for duplicates first
     const duplicateCheck = await checkDuplicateRegistration(

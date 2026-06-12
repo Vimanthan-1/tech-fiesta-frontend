@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
+import { Event, Workshop, SelectedItem } from "@/types";
 import PixelBlast from "@/components/PixelBlast";
 import MatrixRain from "@/components/MatrixRain";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -15,6 +17,10 @@ import GlareHover from "@/components/ReactBits/GlareHover/GlareHover";
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
 import JourneyMap from "@/components/JourneyMap";
+import ContactForm from "@/components/ContactForm";
+import RegistrationForm from "@/components/RegistrationForm";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { FaWhatsapp, FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +31,256 @@ export default function Home() {
   const [isMatrixActive, setIsMatrixActive] = useState(false);
   const [isSelfDestructing, setIsSelfDestructing] = useState(false);
   const [selfDestructCount, setSelfDestructCount] = useState(5);
+  
+  // Lifted selection states for Add-to-Cart registration
+  const [selectedEvents, setSelectedEvents] = useState<SelectedItem[]>([]);
+  const [selectedWorkshops, setSelectedWorkshops] = useState<SelectedItem[]>([]);
+  const [selectedNonTechEvents, setSelectedNonTechEvents] = useState<SelectedItem[]>([]);
 
+  const selectedEventsRef = useRef<SelectedItem[]>([]);
+  const selectedWorkshopsRef = useRef<SelectedItem[]>([]);
+  const selectedNonTechEventsRef = useRef<SelectedItem[]>([]);
+
+  useEffect(() => {
+    selectedEventsRef.current = selectedEvents;
+  }, [selectedEvents]);
+
+  useEffect(() => {
+    selectedWorkshopsRef.current = selectedWorkshops;
+  }, [selectedWorkshops]);
+
+  useEffect(() => {
+    selectedNonTechEventsRef.current = selectedNonTechEvents;
+  }, [selectedNonTechEvents]);
+
+  // Parse deep links with eventId / type search params
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const eventId = params.get("eventId");
+      const eventType = params.get("type");
+      if (eventId && eventType) {
+        const id = parseInt(eventId);
+        if (eventType === "event") {
+          const event = events.find((e) => e.id === id);
+          if (event) setSelectedEvents([{ id: event.id, title: event.title }]);
+        } else if (eventType === "workshop") {
+          const workshop = workshops.find((w) => w.id === id);
+          if (workshop) setSelectedWorkshops([{ id: workshop.id, title: workshop.title }]);
+        } else if (eventType === "non-tech") {
+          const event = events.find((e) => e.id === id && e.type === "non-tech");
+          if (event) setSelectedNonTechEvents([{ id: event.id, title: event.title }]);
+        }
+      }
+    }
+  }, []);
+
+  // Prevent drag selection globally except for form fields
+  useEffect(() => {
+    const preventSelection = (e: any) => {
+      const target = e.target as HTMLElement;
+      if (
+        !target ||
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable ||
+        target.closest("input") ||
+        target.closest("textarea") ||
+        target.closest("select")
+      ) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    document.addEventListener("selectstart", preventSelection);
+    document.addEventListener("dragstart", preventSelection);
+
+    return () => {
+      document.removeEventListener("selectstart", preventSelection);
+      document.removeEventListener("dragstart", preventSelection);
+    };
+  }, []);
+
+  const handleSelectEvent = useCallback((event: Event) => {
+    const exists = selectedEventsRef.current.some((e) => e.id === event.id);
+    if (exists) {
+      toast.success(`Removed "${event.title}" from selections.`, {
+        position: "bottom-right",
+      });
+      setSelectedEvents((prev) => prev.filter((e) => e.id !== event.id));
+    } else {
+      toast((t) => (
+        <div className="flex flex-col gap-2 font-mono text-xs text-white">
+          <span className="font-bold text-red-500">// ADDED: "{event.title}"</span>
+          <span className="text-gray-400">Select workshops and proceed or proceed with registration.</span>
+          <div className="flex gap-2 mt-1">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                setActiveSection("workshops");
+              }}
+              className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold uppercase transition-all duration-200 cursor-pointer"
+            >
+              Add Workshops
+            </button>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                setActiveSection("register");
+              }}
+              className="px-2.5 py-1 bg-white hover:bg-gray-200 text-black rounded text-[10px] font-bold uppercase transition-all duration-200 cursor-pointer"
+            >
+              Register Now
+            </button>
+          </div>
+        </div>
+      ), {
+        position: "bottom-right",
+        duration: 6000,
+        style: {
+          background: "rgba(10, 10, 10, 0.95)",
+          border: "1px solid rgba(239, 68, 68, 0.5)",
+          borderRadius: "12px",
+          padding: "16px",
+          boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.3)",
+          backdropFilter: "blur(8px)",
+        }
+      });
+      setSelectedEvents((prev) => [...prev, { id: event.id, title: event.title }]);
+    }
+  }, []);
+
+  const handleSelectWorkshop = useCallback((workshop: Workshop) => {
+    const exists = selectedWorkshopsRef.current.some((w) => w.id === workshop.id);
+    if (exists) {
+      toast.success(`Removed "${workshop.title}" from selections.`, {
+        position: "bottom-right",
+      });
+      setSelectedWorkshops((prev) => prev.filter((w) => w.id !== workshop.id));
+    } else {
+      toast((t) => (
+        <div className="flex flex-col gap-2 font-mono text-xs text-white">
+          <span className="font-bold text-red-500">// ADDED: "{workshop.title}"</span>
+          <span className="text-gray-400">Select events and proceed or proceed with registration.</span>
+          <div className="flex gap-2 mt-1">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                setActiveSection("events");
+              }}
+              className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold uppercase transition-all duration-200 cursor-pointer"
+            >
+              Add Events
+            </button>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                setActiveSection("register");
+              }}
+              className="px-2.5 py-1 bg-white hover:bg-gray-200 text-black rounded text-[10px] font-bold uppercase transition-all duration-200 cursor-pointer"
+            >
+              Register Now
+            </button>
+          </div>
+        </div>
+      ), {
+        position: "bottom-right",
+        duration: 6000,
+        style: {
+          background: "rgba(10, 10, 10, 0.95)",
+          border: "1px solid rgba(239, 68, 68, 0.5)",
+          borderRadius: "12px",
+          padding: "16px",
+          boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.3)",
+          backdropFilter: "blur(8px)",
+        }
+      });
+      setSelectedWorkshops((prev) => [...prev, { id: workshop.id, title: workshop.title }]);
+    }
+  }, []);
+
+  const handleSelectNonTechEvent = useCallback((event: Event) => {
+    const exists = selectedNonTechEventsRef.current.some((e) => e.id === event.id);
+    if (exists) {
+      toast.success(`Removed "${event.title}" from selections.`, {
+        position: "bottom-right",
+      });
+      setSelectedNonTechEvents((prev) => prev.filter((e) => e.id !== event.id));
+    } else {
+      toast((t) => (
+        <div className="flex flex-col gap-2 font-mono text-xs text-white">
+          <span className="font-bold text-red-500">// ADDED: "{event.title}"</span>
+          <span className="text-gray-400">Select workshops and proceed or proceed with registration.</span>
+          <div className="flex gap-2 mt-1">
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                setActiveSection("workshops");
+              }}
+              className="px-2.5 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold uppercase transition-all duration-200 cursor-pointer"
+            >
+              Add Workshops
+            </button>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                setActiveSection("register");
+              }}
+              className="px-2.5 py-1 bg-white hover:bg-gray-200 text-black rounded text-[10px] font-bold uppercase transition-all duration-200 cursor-pointer"
+            >
+              Register Now
+            </button>
+          </div>
+        </div>
+      ), {
+        position: "bottom-right",
+        duration: 6000,
+        style: {
+          background: "rgba(10, 10, 10, 0.95)",
+          border: "1px solid rgba(239, 68, 68, 0.5)",
+          borderRadius: "12px",
+          padding: "16px",
+          boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(239, 68, 68, 0.3)",
+          backdropFilter: "blur(8px)",
+        }
+      });
+      setSelectedNonTechEvents((prev) => [...prev, { id: event.id, title: event.title }]);
+    }
+  }, []);
+
+  const handleClearCart = useCallback(() => {
+    setSelectedEvents([]);
+    setSelectedWorkshops([]);
+    setSelectedNonTechEvents([]);
+  }, []);
+
+  const totalSelectionCount = selectedEvents.length + selectedWorkshops.length + selectedNonTechEvents.length;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  // Robustly pin page to top during loading transitions, section changes, and GSAP animations
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    window.scrollTo(0, 0);
+
+    const timeouts = [50, 150, 300, 600, 1000].map((delay) =>
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, delay)
+    );
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
+  }, [isLoading, showAnimatedText, activeSection]);
 
   useEffect(() => {
     if (!isSelfDestructing) return;
@@ -79,23 +334,23 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [isSelfDestructing]);
 
-  const handleLoadingComplete = () => {
+  const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
     // Start the animated text after the loading is complete and clock is visible
     setTimeout(() => {
       setShowAnimatedText(true);
     }, 1000); // Show text 1 second after clock becomes visible
-  };
+  }, []);
 
-  const handleClockCollectionReady = () => {
+  const handleClockCollectionReady = useCallback(() => {
     setClockCollectionReady(true);
-  };
-  const handleTextAnimationComplete = () => {
+  }, []);
+  const handleTextAnimationComplete = useCallback(() => {
     // Show NavBar immediately (no delay)
     setShowNavBar(true);
 
     console.log("Text animation completed");
-  };
+  }, []);
   // Define loading tasks to track
   const loadingTasks = [
     { name: "Odyssey Background", completed: clockCollectionReady },
@@ -144,6 +399,14 @@ export default function Home() {
             className="absolute inset-0 opacity-55 max-sm:opacity-50 bg-cover bg-center max-sm:mix-blend-normal mix-blend-luminosity" 
             style={{ backgroundImage: "url('/vintage_map.png')" }}
           />
+          {/* Secret Coding Brackets watermark (large, centered, very low opacity) */}
+          <div 
+            className="absolute inset-0 opacity-[0.02] bg-no-repeat bg-center mix-blend-screen scale-150 sm:scale-100" 
+            style={{ 
+              backgroundImage: "url('/secret_brackets.jpg')",
+              filter: "invert(1) brightness(0.9)"
+            }}
+          />
           <PixelBlast
             variant="square"
             pixelSize={4}
@@ -180,6 +443,7 @@ export default function Home() {
             <NavBar 
               activeSection={activeSection} 
               onSectionChange={setActiveSection} 
+              selectionCount={totalSelectionCount}
             />
           )}
 
@@ -196,9 +460,6 @@ export default function Home() {
                       exit={{ opacity: 0, y: -15 }}
                       transition={{ duration: 0.35, ease: "easeInOut" }}
                       className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-200px)] py-4 sm:py-8 relative px-4 gap-12"
-                      style={{
-                        cursor: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'32\' height=\'32\' viewBox=\'0 0 32 32\' fill=\'none\' stroke=\'%23ef4444\' stroke-width=\'1.5\'><circle cx=\'16\' cy=\'16\' r=\'6\'/><line x1=\'16\' y1=\'2\' x2=\'16\' y2=\'10\'/><line x1=\'16\' y1=\'22\' x2=\'16\' y2=\'30\'/><line x1=\'2\' y1=\'16\' x2=\'10\' y2=\'16\'/><line x1=\'22\' y1=\'16\' x2=\'30\' y2=\'16\'/></svg>") 16 16, crosshair'
-                      }}
                     >
                       {/* Cyberpunk corner brackets */}
                       <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-red-500/40 pointer-events-none" />
@@ -266,7 +527,7 @@ export default function Home() {
                         </div>
                         
                         {/* Center Column: Original Tech HUD divider (visible on xl and up) */}
-                        <div className="hidden xl:flex flex-col items-center justify-center gap-5 text-red-500/40 font-mono text-[9px] tracking-[0.25em] uppercase select-none px-4 relative min-w-[120px] animate-[fadeIn_1s_ease-out_forwards] delay-1000">
+                        <div className="hidden xl:flex flex-col items-center justify-center gap-5 text-red-500/40 font-mono text-[9px] tracking-[0.25em] uppercase select-none px-4 relative min-w-[120px] animate-fade-in anim-delay-1000">
                           <div className="text-[10px] text-red-500 animate-pulse font-bold tracking-[0.1em]">[ SYSTEM ]</div>
                           <div className="w-px h-12 bg-gradient-to-b from-transparent via-red-500/30 to-transparent" />
                           <div className="flex flex-col gap-1 items-center leading-normal">
@@ -289,19 +550,21 @@ export default function Home() {
                         </div>
 
                         {/* Right side: Spartan Poster */}
-                        <div className="flex-1 min-w-[140px] sm:min-w-[240px] md:min-w-[380px] lg:min-w-[320px] max-w-[170px] sm:max-w-[280px] md:max-w-[480px] lg:max-w-[420px] relative z-10 character-float select-none animate-[fadeIn_1.2s_ease-out_forwards]">
-                          {/* Outer glowing backlight red aura */}
-                          <div className="absolute inset-0 bg-red-600/15 blur-[60px] rounded-2xl scale-95" />
-                          <img
-                            src="/odyssey_poster.png"
-                            alt="Tech Fiesta 2.0: The Odyssey Poster"
-                            className="w-full h-auto object-contain rounded-2xl border border-red-500/20 shadow-[0_20px_50px_rgba(220,38,38,0.3)] pointer-events-none"
-                          />
-                          
-                          {/* Techy block overlay to cover the diamond symbol */}
-                          <div className="absolute bottom-[4.2%] right-[4.2%] bg-black border border-red-500/40 rounded px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-red-500 font-mono text-[8px] sm:text-[9px] tracking-[0.15em] uppercase select-none flex items-center gap-1 sm:gap-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.8)] pointer-events-auto hover:border-red-500 transition-all duration-300">
-                            <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-red-500 animate-ping" />
-                            SYS ACTIVE
+                        <div className="flex-1 min-w-[140px] sm:min-w-[240px] md:min-w-[380px] lg:min-w-[320px] max-w-[170px] sm:max-w-[280px] md:max-w-[480px] lg:max-w-[420px] relative z-10 select-none animate-fade-in">
+                          <div className="character-float w-full h-full relative">
+                            {/* Outer glowing backlight red aura */}
+                            <div className="absolute inset-0 bg-red-600/15 blur-[60px] rounded-2xl scale-95" />
+                            <img
+                              src="/odyssey_poster.png"
+                              alt="Tech Fiesta 2.0: The Odyssey Poster"
+                              className="w-full h-auto object-contain rounded-2xl border border-red-500/20 shadow-[0_20px_50px_rgba(220,38,38,0.3)] pointer-events-none"
+                            />
+                            
+                            {/* Techy block overlay to cover the diamond symbol */}
+                            <div className="absolute bottom-[4.2%] right-[4.2%] bg-black border border-red-500/40 rounded px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-red-500 font-mono text-[8px] sm:text-[9px] tracking-[0.15em] uppercase select-none flex items-center gap-1 sm:gap-1.5 shadow-[0_4px_12px_rgba(0,0,0,0.8)] pointer-events-auto hover:border-red-500 transition-all duration-300">
+                              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-red-500 animate-ping" />
+                              SYS ACTIVE
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -404,6 +667,10 @@ export default function Home() {
                           events={events}
                           title="Featured Events"
                           showFilter={true}
+                          selectedEvents={selectedEvents}
+                          selectedNonTechEvents={selectedNonTechEvents}
+                          onSelectEvent={handleSelectEvent}
+                          onSelectNonTechEvent={handleSelectNonTechEvent}
                         />
                       </div>
                     </motion.div>
@@ -431,7 +698,113 @@ export default function Home() {
                           }))}
                           title="Hands-On Workshops"
                           showFilter={true}
+                          selectedWorkshops={selectedWorkshops}
+                          onSelectWorkshop={handleSelectWorkshop}
                         />
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {activeSection === "contact" && (
+                    <motion.div
+                      key="contact"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -15 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      className="w-full min-h-[calc(100vh-200px)] py-4 sm:py-8 flex items-center justify-center"
+                    >
+                      <div className="w-full max-w-4xl px-5 py-8 sm:p-10 rounded-2xl bg-black/75 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)]">
+                        <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 font-[family-name:var(--font-bebas-neue)] tracking-wider text-center text-white">
+                          Contact Command Center
+                        </h2>
+                        <h3 className="text-xl sm:text-2xl font-semibold text-red-500 mb-8 font-mono tracking-widest uppercase text-center">
+                          // ESTABLISHING CONNECTION PROTOCOL
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start w-full">
+                          {/* Info Card */}
+                          <div className="md:col-span-5 space-y-6 text-left border-r border-white/10 pr-0 md:pr-8">
+                            <div className="space-y-4">
+                              <div className="flex items-start gap-3">
+                                <Mail className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">General</h4>
+                                  <a href="mailto:Asymmetric@citchennai.net" className="text-white hover:text-red-400 text-sm font-semibold break-all">
+                                    Asymmetric@citchennai.net
+                                  </a>
+                                </div>
+                              </div>
+
+                              <div className="flex items-start gap-3">
+                                <Phone className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">Helpline</h4>
+                                  <a href="tel:+911234567890" className="text-white hover:text-red-400 text-sm font-semibold">
+                                    +91 12345 67890
+                                  </a>
+                                </div>
+                              </div>
+
+                              <div className="flex items-start gap-3">
+                                <MapPin className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">Headquarters</h4>
+                                  <p className="text-white text-xs leading-relaxed font-semibold">
+                                    The Chennai Institute of Technology (CIT),<br />
+                                    Sarathy Nagar, Kundrathur,<br />
+                                    Chennai-600069, Tamil Nadu, India
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="pt-4 border-t border-white/10">
+                              <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider mb-3">// SOC_CHANNELS</h4>
+                              <div className="flex gap-2">
+                                <a href="https://www.instagram.com/clubasymmetric/" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-gray-300 transition-all duration-300">
+                                  <FaInstagram className="w-4 h-4" />
+                                </a>
+                                <a href="https://www.linkedin.com/company/club-asymmetric/" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-gray-300 transition-all duration-300">
+                                  <FaLinkedin className="w-4 h-4" />
+                                </a>
+                                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-gray-300 transition-all duration-300">
+                                  <FaWhatsapp className="w-4 h-4" />
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Form */}
+                          <div className="md:col-span-7 w-full">
+                            <ContactForm />
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {activeSection === "register" && (
+                    <motion.div
+                      key="register"
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -15 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      className="w-full min-h-[calc(100vh-200px)] py-4 sm:py-8"
+                    >
+                      <div className="w-full max-w-5xl mx-auto px-4 py-6 sm:p-8 rounded-2xl bg-black/75 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)]">
+                        <Suspense fallback={<div className="text-white text-center font-mono py-12">Loading registration form...</div>}>
+                          <RegistrationForm 
+                            selectedEvents={selectedEvents}
+                            selectedWorkshops={selectedWorkshops}
+                            selectedNonTechEvents={selectedNonTechEvents}
+                            onUpdateEvents={setSelectedEvents}
+                            onUpdateWorkshops={setSelectedWorkshops}
+                            onUpdateNonTechEvents={setSelectedNonTechEvents}
+                            onClearCart={handleClearCart}
+                          />
+                        </Suspense>
                       </div>
                     </motion.div>
                   )}

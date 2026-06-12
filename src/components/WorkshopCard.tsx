@@ -5,9 +5,11 @@ import SpotlightCard from "./ReactBits/SpotlightCard/SpotlightCard";
 
 interface WorkshopCardProps {
   workshop: Workshop;
+  isSelected?: boolean;
+  onSelect?: (workshop: Workshop) => void;
 }
 
-const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop }) => {
+const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = false, onSelect }) => {
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = {
       weekday: "short",
@@ -19,13 +21,21 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop }) => {
   };
 
   const handleEnrollClick = () => {
-    const registrationUrl = generateRegistrationUrl(workshop.id, "workshop");
-    window.location.href = registrationUrl;
+    if (onSelect) {
+      onSelect(workshop);
+    } else {
+      const registrationUrl = generateRegistrationUrl(workshop.id, "workshop");
+      window.location.href = registrationUrl;
+    }
   };
 
   return (
     <SpotlightCard 
-      className="bg-white/10 backdrop-blur-md rounded-lg border border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105"
+      className={`bg-white/10 backdrop-blur-md rounded-lg border transition-all duration-300 hover:scale-105 ${
+        isSelected 
+          ? "border-red-500 bg-red-950/20 shadow-[0_0_15px_rgba(220,38,38,0.15)]" 
+          : "border-white/20 hover:bg-white/15"
+      }`}
       spotlightColor="rgba(220, 38, 38, 0.4)"
     >
       {/* Header with Price */}
@@ -146,9 +156,13 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop }) => {
         <div className="flex justify-end">
           <button 
             onClick={handleEnrollClick}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-all duration-200 transform hover:scale-105 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
+              isSelected 
+                ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
+                : "bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
+            }`}
           >
-            Enroll Now
+            {isSelected ? "✓ Selected" : "Enroll Now"}
           </button>
         </div>
       </div>

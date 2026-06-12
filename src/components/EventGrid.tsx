@@ -1,17 +1,25 @@
 import React from "react";
-import { Event } from "@/types";
+import { Event, SelectedItem } from "@/types";
 import EventCard from "./EventCard";
 
 interface EventGridProps {
   events: Event[];
   title?: string;
   showFilter?: boolean;
+  selectedEvents?: SelectedItem[];
+  selectedNonTechEvents?: SelectedItem[];
+  onSelectEvent?: (event: Event) => void;
+  onSelectNonTechEvent?: (event: Event) => void;
 }
 
 const EventGrid: React.FC<EventGridProps> = ({
   events,
   title = "Events",
   showFilter = false,
+  selectedEvents = [],
+  selectedNonTechEvents = [],
+  onSelectEvent,
+  onSelectNonTechEvent,
 }) => {
   const [filter, setFilter] = React.useState<"all" | "tech" | "non-tech">(
     "all"
@@ -38,33 +46,33 @@ const EventGrid: React.FC<EventGridProps> = ({
 
         {/* Filter Tabs */}
         {showFilter && (
-          <div className="flex bg-white/5 rounded-lg p-1 backdrop-blur-sm border border-white/10">
+          <div className="flex flex-wrap gap-2.5">
             <button
               onClick={() => setFilter("all")}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-5 py-2 text-sm font-medium rounded-full border transition-all duration-300 cursor-pointer ${
                 filter === "all"
-                  ? "bg-white/10 text-white"
-                  : "text-gray-300 hover:text-white hover:bg-white/5"
+                  ? "bg-red-600/35 border-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.35)]"
+                  : "bg-red-950/15 border-red-600/40 text-red-200/90 hover:bg-red-600/25 hover:border-red-500/75 hover:text-white"
               }`}
             >
               All Events
             </button>
             <button
               onClick={() => setFilter("tech")}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-5 py-2 text-sm font-medium rounded-full border transition-all duration-300 cursor-pointer ${
                 filter === "tech"
-                  ? "bg-red-500/20 text-red-300"
-                  : "text-gray-300 hover:text-white hover:bg-white/5"
+                  ? "bg-red-600/35 border-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.35)]"
+                  : "bg-red-950/15 border-red-600/40 text-red-200/90 hover:bg-red-600/25 hover:border-red-500/75 hover:text-white"
               }`}
             >
               Tech Events
             </button>
             <button
               onClick={() => setFilter("non-tech")}
-              className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+              className={`px-5 py-2 text-sm font-medium rounded-full border transition-all duration-300 cursor-pointer ${
                 filter === "non-tech"
-                  ? "bg-red-500/20 text-red-300"
-                  : "text-gray-300 hover:text-white hover:bg-white/5"
+                  ? "bg-red-600/35 border-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.35)]"
+                  : "bg-red-950/15 border-red-600/40 text-red-200/90 hover:bg-red-600/25 hover:border-red-500/75 hover:text-white"
               }`}
             >
               Non-Tech Events
@@ -77,7 +85,16 @@ const EventGrid: React.FC<EventGridProps> = ({
       {filteredEvents.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <EventCard 
+              key={event.id} 
+              event={event} 
+              isSelected={
+                event.type === "tech"
+                  ? selectedEvents.some((e) => e.id === event.id)
+                  : selectedNonTechEvents.some((e) => e.id === event.id)
+              }
+              onSelect={event.type === "tech" ? onSelectEvent : onSelectNonTechEvent}
+            />
           ))}
         </div>
       ) : (
