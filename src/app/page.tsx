@@ -468,61 +468,17 @@ export default function Home() {
                       <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-red-500/40 pointer-events-none" />
 
                       <div className="w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16">
-                        {/* Left side: Heading Text */}
-                        <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start select-none font-[family-name:var(--font-bebas-neue)] tracking-wider">
-                          <div className="overflow-hidden">
-                            <ScrambledText
-                              className="text-white text-6xl sm:text-8xl md:text-9xl leading-none font-bold uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                              radius={120}
-                              duration={1.0}
-                              speed={0.6}
-                              scrambleChars=".:"
-                              delay={0.1}
-                            >
-                              TECH
-                            </ScrambledText>
-                          </div>
-                          <div className="overflow-hidden mt-1 md:mt-2">
-                            <ScrambledText
-                              className="text-white text-6xl sm:text-8xl md:text-9xl leading-none font-bold uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                              radius={120}
-                              duration={1.0}
-                              speed={0.6}
-                              scrambleChars=".:"
-                              delay={0.2}
-                            >
-                              FIESTA
-                            </ScrambledText>
-                          </div>
-                          
-                          {/* The Odyssey slanted stamp banner */}
-                          <div className="my-3 md:my-6 transform -rotate-2 origin-left overflow-hidden bg-red-600 px-4 py-1.5 md:px-6 md:py-2 shadow-[0_0_20px_rgba(220,38,38,0.5)] border border-red-500/30">
-                            <ScrambledText
-                              className="text-black text-xl sm:text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-[0.1em]"
-                              radius={120}
-                              duration={1.0}
-                              speed={0.6}
-                              scrambleChars=".:"
-                              delay={0.3}
-                            >
-                              THE ODYSSEY
-                            </ScrambledText>
-                          </div>
-
-                          <div className="overflow-hidden">
-                            <ScrambledText
-                              className="text-white text-6xl sm:text-8xl md:text-9xl leading-none font-bold uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]"
-                              radius={120}
-                              duration={1.0}
-                              speed={0.6}
-                              scrambleChars=".:"
-                              delay={0.4}
-                              onComplete={handleTextAnimationComplete}
-                            >
-                              2.0
-                            </ScrambledText>
-                          </div>
-                          
+                        {/* Left side: Heading Logo */}
+                        <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start select-none md:pl-10">
+                          <motion.img
+                            src="/tech_fiesta_odyssey.png"
+                            alt="Tech Fiesta: The Odyssey 2.0"
+                            initial={{ opacity: 0, scale: 0.92, y: 15 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                            onAnimationComplete={handleTextAnimationComplete}
+                            className="w-full max-w-[240px] sm:max-w-[300px] md:max-w-[360px] h-auto object-contain drop-shadow-[0_0_30px_rgba(239,68,68,0.2)] mb-4"
+                          />
                           <CountdownTimer />
                         </div>
                         
