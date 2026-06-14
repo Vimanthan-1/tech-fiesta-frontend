@@ -467,9 +467,9 @@ export default function Home() {
                       <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-red-500/40 pointer-events-none" />
                       <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-red-500/40 pointer-events-none" />
 
-                      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16">
+                      <div className="w-full flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-16">
                         {/* Left side: Heading Logo */}
-                        <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start select-none md:pl-10">
+                        <div className="flex-1 text-center md:text-left flex flex-col items-center md:items-start select-none md:pl-4 lg:pl-10">
                           <motion.img
                             src="/tech_fiesta_odyssey.png"
                             alt="Tech Fiesta: The Odyssey 2.0"
@@ -477,7 +477,7 @@ export default function Home() {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                             onAnimationComplete={handleTextAnimationComplete}
-                            className="w-full max-w-[240px] sm:max-w-[300px] md:max-w-[360px] h-auto object-contain drop-shadow-[0_0_30px_rgba(239,68,68,0.2)] mb-4"
+                            className="w-full max-w-[240px] sm:max-w-[280px] md:max-w-[260px] lg:max-w-[360px] h-auto object-contain drop-shadow-[0_0_30px_rgba(239,68,68,0.2)] mb-4"
                           />
                           <CountdownTimer />
                         </div>
@@ -506,7 +506,7 @@ export default function Home() {
                         </div>
 
                         {/* Right side: Spartan Poster */}
-                        <div className="flex-1 min-w-[140px] sm:min-w-[240px] md:min-w-[380px] lg:min-w-[320px] max-w-[170px] sm:max-w-[280px] md:max-w-[480px] lg:max-w-[420px] relative z-10 select-none animate-fade-in">
+                        <div className="flex-1 min-w-[140px] sm:min-w-[220px] md:min-w-[280px] lg:min-w-[320px] max-w-[170px] sm:max-w-[260px] md:max-w-[340px] lg:max-w-[420px] relative z-10 select-none animate-fade-in">
                           <div className="character-float w-full h-full relative">
                             {/* Outer glowing backlight red aura */}
                             <div className="absolute inset-0 bg-red-600/15 blur-[60px] rounded-2xl scale-95" />

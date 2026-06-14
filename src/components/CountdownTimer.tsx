@@ -87,10 +87,34 @@ const CountdownTimer: React.FC = () => {
         }
         @media (min-width: 640px) {
           .timer-box {
+            width: 64px;
+            height: 64px;
+            font-size: 1.85rem;
+            border-radius: 10px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .timer-box {
             width: 76px;
             height: 76px;
             font-size: 2.35rem;
             border-radius: 12px;
+          }
+        }
+        .dots-container {
+          height: 52px;
+          margin-bottom: 18px;
+        }
+        @media (min-width: 640px) {
+          .dots-container {
+            height: 64px;
+            margin-bottom: 22px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .dots-container {
+            height: 76px;
+            margin-bottom: 25px;
           }
         }
       `}</style>
@@ -98,7 +122,7 @@ const CountdownTimer: React.FC = () => {
       {timeBlocks.map((block, idx) => (
         <React.Fragment key={block.label}>
           {idx > 0 && (
-            <div className="flex flex-col gap-1 sm:gap-1.5 justify-center h-[52px] sm:h-[76px] px-0.5 sm:px-1 mb-[18px] sm:mb-[25px]">
+            <div className="dots-container flex flex-col gap-1 sm:gap-1.5 justify-center px-0.5 sm:px-1">
               <span className="w-1 sm:w-1.5 h-1 sm:h-1.5 bg-red-500/80 rounded-sm shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse" />
               <span className="w-1 sm:w-1.5 h-1 sm:h-1.5 bg-red-500/80 rounded-sm shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse" />
             </div>

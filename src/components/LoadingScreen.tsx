@@ -75,6 +75,24 @@ const LoadingScreen = ({
     }
   }, [allTasksCompleted, animatedProgress, onLoadingComplete]);
 
+  // Safety fallback: Force load completion after 3 seconds to prevent stuck loader
+  useEffect(() => {
+    const safetyTimer = setTimeout(() => {
+      if (isVisible) {
+        console.warn("Loading screen safety fallback triggered.");
+        window.scrollTo(0, 0);
+        onLoadingComplete?.();
+        setIsTransitioning(true);
+        const timer = setTimeout(() => {
+          document.body.style.overflow = "";
+          setIsVisible(false);
+        }, 250);
+      }
+    }, 3000);
+
+    return () => clearTimeout(safetyTimer);
+  }, [isVisible, onLoadingComplete]);
+
   if (!isVisible) return null;
 
   return (

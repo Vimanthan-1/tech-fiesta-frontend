@@ -280,7 +280,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               strokeDasharray="8 6"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 1.8, ease: "easeInOut" }}
             />
             {/* Animated glowing overlay path */}
@@ -294,7 +294,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               filter="url(#path-glow)"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 1.8, ease: "easeInOut" }}
             />
           </svg>
@@ -321,7 +321,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               strokeDasharray="8 6"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 1.8, ease: "easeInOut" }}
             />
             {/* Animated glowing overlay path */}
@@ -335,7 +335,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               filter="url(#path-glow-mobile)"
               initial={{ pathLength: 0 }}
               whileInView={{ pathLength: 1 }}
-              viewport={{ once: false }}
+              viewport={{ once: true }}
               transition={{ duration: 1.8, ease: "easeInOut" }}
             />
           </svg>
@@ -352,7 +352,7 @@ export default function JourneyMap({ activeSection, onSectionChange }: JourneyMa
               key={step.id}
               initial={{ opacity: 0, scale: 0.75, y: 40 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: false, margin: "-80px" }}
+              viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
               className="milestone-node absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 z-10"
               style={{
