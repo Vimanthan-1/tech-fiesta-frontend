@@ -563,7 +563,7 @@ export default function Home() {
                           >
                             <div className="rounded-lg p-6">
                               <div className="text-4xl font-bold text-red-500 mb-2 font-[family-name:var(--font-bebas-neue)] tracking-wider">
-                                500+
+                                1000+
                               </div>
                               <div className="text-gray-300 font-medium">Attendees Expected</div>
                             </div>
@@ -599,7 +599,7 @@ export default function Home() {
                           >
                             <div className="rounded-lg p-6">
                               <div className="text-4xl font-bold text-red-500 mb-2 font-[family-name:var(--font-bebas-neue)] tracking-wider">
-                                3
+                                1
                               </div>
                               <div className="text-gray-300 font-medium">Days of Innovation</div>
                             </div>
