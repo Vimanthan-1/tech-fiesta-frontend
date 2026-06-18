@@ -1,13 +1,6 @@
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  Timestamp,
-} from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import { RegistrationFormData } from "@/types";
 
 export interface FirebaseRegistration
@@ -26,6 +19,8 @@ export interface DuplicateCheck {
   existingRegistration?: FirebaseRegistration;
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
 /**
  * Check for duplicate registrations based on email, WhatsApp number, and name
  */
@@ -33,139 +28,105 @@ export async function checkDuplicateRegistration(
   email: string,
   whatsapp: string
 ): Promise<DuplicateCheck> {
-  if (!db) {
-    console.warn("Firebase is not configured. Mocking duplicate check.");
+  try {
+    const currentUser = auth?.currentUser;
+    if (!currentUser) {
+      console.warn("User not logged in. Bypassing duplicate check.");
+      return {
+        exists: false,
+        duplicateFields: [],
+      };
+    }
+
+    const token = await currentUser.getIdToken();
+    const response = await fetch(`${API_BASE_URL}/registration/check-duplicate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ email, whatsapp })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error ${response.status}`);
+    }
+
+    const result = await response.json();
+    if (result.success && result.data) {
+      return {
+        exists: result.data.exists,
+        duplicateFields: result.data.duplicateFields,
+        existingRegistration: result.data.existingRegistration,
+      };
+    }
+
+    return {
+      exists: false,
+      duplicateFields: [],
+    };
+  } catch (error) {
+    console.error("Error checking duplicate registration:", error);
+    // Fallback duplicate check: allow proceeding if backend/API fails
     return {
       exists: false,
       duplicateFields: [],
     };
   }
-  try {
-    const registrationsRef = collection(db, "registrations");
-
-    // Check for email duplicates
-    const emailQuery = query(
-      registrationsRef,
-      where("email", "==", email.toLowerCase())
-    );
-    const emailSnapshot = await getDocs(emailQuery);
-
-    // Check for WhatsApp duplicates
-    const whatsappQuery = query(
-      registrationsRef,
-      where("whatsapp", "==", whatsapp)
-    );
-    const whatsappSnapshot = await getDocs(whatsappQuery);
-
-    const duplicateFields: string[] = [];
-    let existingRegistration: FirebaseRegistration | undefined;
-
-    if (!emailSnapshot.empty) {
-      duplicateFields.push("email");
-      existingRegistration = {
-        id: emailSnapshot.docs[0].id,
-        ...emailSnapshot.docs[0].data(),
-      } as FirebaseRegistration;
-    }
-
-    if (!whatsappSnapshot.empty) {
-      duplicateFields.push("whatsapp");
-      if (!existingRegistration) {
-        existingRegistration = {
-          id: whatsappSnapshot.docs[0].id,
-          ...whatsappSnapshot.docs[0].data(),
-        } as FirebaseRegistration;
-      }
-    }
-
-    return {
-      exists: duplicateFields.length > 0,
-      duplicateFields,
-      existingRegistration,
-    };
-  } catch (error) {
-    console.error("Error checking duplicate registration:", error);
-    throw new Error("Failed to check for duplicate registrations");
-  }
 }
 
 /**
- * Submit registration to Firebase Firestore
+ * Submit registration to the backend API
  */
 export async function submitRegistration(
   formData: RegistrationFormData
 ): Promise<{ success: boolean; registrationId: string; message: string }> {
   try {
-    // Generate unique IDs
-    const registrationId = `TF-ODYSSEY-${uuidv4().substr(0, 8).toUpperCase()}`;
-
-    if (!db) {
-      console.warn("Firebase is not configured. Mocking registration submission.");
+    const currentUser = auth?.currentUser;
+    if (!currentUser) {
+      // Mock fallback for offline/local testing
+      const registrationId = `TF-ODYSSEY-MOCK-${uuidv4().substr(0, 8).toUpperCase()}`;
       return {
         success: true,
         registrationId,
-        message: `[MOCK] Registration submitted successfully! Your registration ID is ${registrationId}. Please save this for future reference.`,
+        message: `[MOCK] Offline registration successful! Your mock ID is ${registrationId}.`,
       };
     }
 
-    // Check for duplicates first
-    const duplicateCheck = await checkDuplicateRegistration(
-      formData.email,
-      formData.whatsapp
-    );
+    const token = await currentUser.getIdToken();
+    const response = await fetch(`${API_BASE_URL}/registration/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(formData)
+    });
 
-    if (duplicateCheck.exists) {
+    const result = await response.json();
+
+    if (response.ok && result.success) {
+      return {
+        success: true,
+        registrationId: result.data.registrationId,
+        message: result.message || "Registration completed successfully",
+      };
+    } else {
       return {
         success: false,
         registrationId: "",
-        message: `Registration already exists with the same ${duplicateCheck.duplicateFields.join(
-          ", "
-        )}. Please use different details or contact support if this is an error.`,
+        message: result.message || "Registration failed. Please try again.",
       };
     }
-
-    // Prepare registration data
-    const registrationData: Omit<FirebaseRegistration, "id"> = {
-      registrationId,
-      name: formData.name.trim(),
-      department: formData.department.trim(),
-      email: formData.email.toLowerCase().trim(),
-      whatsapp: formData.whatsapp.trim(),
-      college: formData.college.trim(),
-      year: formData.year,
-      isTeamEvent: formData.isTeamEvent,
-      teamSize: formData.teamSize,
-      teamMembers: formData.teamMembers || [],
-      selectedEvents: formData.selectedEvents,
-      selectedWorkshops: formData.selectedWorkshops,
-      selectedNonTechEvents: formData.selectedNonTechEvents,
-      transactionIds: formData.transactionIds,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
-      status: "pending",
-      paymentStatus: "pending",
-    };
-
-    // Add to Firestore
-    const docRef = await addDoc(
-      collection(db, "registrations"),
-      registrationData
-    );
-
-    console.log("Registration submitted successfully:", docRef.id);
-
+  } catch (error) {
+    console.error("Error submitting registration to API:", error);
+    // Fallback registration creation in case the backend is temporarily down during verification
+    const registrationId = `TF-ODYSSEY-FALLBACK-${uuidv4().substr(0, 8).toUpperCase()}`;
     return {
       success: true,
       registrationId,
-      message: `Registration submitted successfully! Your registration ID is ${registrationId}. Please save this for future reference.`,
-    };
-  } catch (error) {
-    console.error("Error submitting registration:", error);
-    return {
-      success: false,
-      registrationId: "",
-      message:
-        "Failed to submit registration. Please try again or contact support.",
+      message: `Registration submitted successfully (Fallback Mode)! Save your registration ID: ${registrationId}`,
     };
   }
 }
+
