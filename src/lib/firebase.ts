@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v9-compat and later, measurementId is optional
@@ -22,9 +23,11 @@ const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
 
 // Initialize Firebase services
 export const db = app ? getFirestore(app) : null;
+export const auth = app ? getAuth(app) : null;
 
 // Initialize Analytics (only in browser environment and if measurementId exists)
 export const analytics =
   (app && typeof window !== "undefined" && firebaseConfig.measurementId) ? getAnalytics(app) : null;
 
 export default app;
+
