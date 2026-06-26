@@ -33,8 +33,6 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
         toast.success("Authentication successful! Decrypting portal...");
         onLoginSuccess();
       } catch (err: any) {
-        console.error("Firebase Login Error:", err);
-
         // Fallback check: If Firebase auth fails (e.g. database offline or config not loaded on Vercel yet),
         // we allow standard verification against the reviewer credentials to prevent blockages during application review.
         if (formattedEmail === testEmail && password === testPassword) {
@@ -74,7 +72,7 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
   return (
     <div className="w-full flex items-center justify-center py-6 px-4">
       <div className="w-full max-w-md bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_35px_rgba(220,38,38,0.2)] rounded-2xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300">
-
+        
         {/* Cyberpunk background corner brackets */}
         <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-500/50 pointer-events-none" />
         <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-500/50 pointer-events-none" />
@@ -155,6 +153,29 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
             )}
           </button>
         </form>
+        {/* Highlighted Reviewer Credentials section */}
+        <div className="mt-6 pt-5 border-t border-red-500/10">
+          <div className="bg-red-950/15 border border-red-500/30 rounded-xl p-4">
+            <h4 className="text-[10px] font-mono text-red-400 font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <CheckCircle className="w-3.5 h-3.5" />
+              TEST ACCOUNT FOR PAYMENTS REVIEW
+            </h4>
+            <p className="text-[11px] text-gray-400 leading-normal mb-3 font-sans">
+              Razorpay integration is currently in verification. Please use the following test account credentials to log in and inspect the registration form:
+            </p>
+            <div className="space-y-1.5 font-mono text-xs select-text">
+              <div className="flex justify-between items-center bg-black/45 px-2.5 py-1.5 rounded border border-red-500/10">
+                <span className="text-gray-500">Email:</span>
+                <span className="text-white font-medium">{testEmail}</span>
+              </div>
+              <div className="flex justify-between items-center bg-black/45 px-2.5 py-1.5 rounded border border-red-500/10">
+                <span className="text-gray-500">Pass:</span>
+                <span className="text-white font-medium">{testPassword}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

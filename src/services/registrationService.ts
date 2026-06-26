@@ -229,4 +229,3 @@ export async function verifyPayment(paymentDetails: {
     };
   }
 }
-
