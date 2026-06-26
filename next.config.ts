@@ -7,7 +7,7 @@ try {
   const sourcePath = path.join(process.cwd(), "public", "secret_brackets.jpg");
   const destPath1 = path.join(process.cwd(), "src", "app", "favicon.ico");
   const destPath2 = path.join(process.cwd(), "public", "favicon.ico");
-  
+
   if (fs.existsSync(sourcePath)) {
     fs.copyFileSync(sourcePath, destPath1);
     fs.copyFileSync(sourcePath, destPath2);
@@ -18,7 +18,9 @@ try {
 }
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Explicitly opt-in to Turbopack (Next.js 16 default bundler).
+  // Silences the "webpack config with no turbopack config" warning.
+  turbopack: {},
 };
 
 export default nextConfig;
