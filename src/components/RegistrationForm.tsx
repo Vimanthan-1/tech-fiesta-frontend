@@ -8,7 +8,22 @@ import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
 import { validateEmail, validatePhone } from "@/utils/registration";
 import { CheckCircle, MapPin } from "lucide-react";
-import { submitRegistration, checkDuplicateRegistration } from "@/services/registrationService";
+import { submitRegistration, checkDuplicateRegistration, createPaymentOrder, verifyPayment } from "@/services/registrationService";
+
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (typeof window !== "undefined" && (window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 import { downloadRegistrationPDF, downloadRegistrationText, downloadRegistrationJSON, RegistrationDownloadData } from "@/utils/downloadUtils";
 
 interface RegistrationFormProps {
@@ -249,33 +264,136 @@ export default function RegistrationForm({
           `Registration already exists with the same ${duplicateCheck.duplicateFields.join(', ')}. Please use different details.`,
           { duration: 6000 }
         );
+        setIsSubmitting(false);
         return;
       }
       
       const result = await submitRegistration(formData);
       
       if (result.success) {
-        const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
-        
-        setSuccessData({
-          registrationId: result.registrationId,
-          formData: { ...formData },
-          submissionDate: new Date().toLocaleString()
-        });
-        
-        toast.success(
-          `Successfully registered! Events registered: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
-          { duration: 8000 }
-        );
-        onClearCart?.();
+        if (result.requiresPayment) {
+          toast.loading("Initiating secure payment gateway...", { id: "payment-toast" });
+          
+          const scriptLoaded = await loadRazorpayScript();
+          if (!scriptLoaded) {
+            toast.error("Failed to load Razorpay SDK. Please check your internet connection.", { id: "payment-toast" });
+            setIsSubmitting(false);
+            return;
+          }
+          
+          const orderResponse = await createPaymentOrder(formData, result.amount || 0);
+          if (!orderResponse.success || !orderResponse.data) {
+            toast.error(orderResponse.message || "Failed to create payment order", { id: "payment-toast" });
+            setIsSubmitting(false);
+            return;
+          }
+          
+          const { orderId, amount, currency, key } = orderResponse.data;
+          
+          toast.dismiss("payment-toast");
+          
+          const options = {
+            key: key,
+            amount: amount,
+            currency: currency,
+            name: "Tech Fiesta 2026",
+            description: "Registration Fee",
+            image: "/tech_fiesta_odyssey.png",
+            order_id: orderId,
+            prefill: {
+              name: formData.name,
+              email: formData.email,
+              contact: formData.whatsapp,
+            },
+            notes: {
+              college: formData.college,
+              department: formData.department,
+            },
+            theme: {
+              color: "#DC2626",
+            },
+            handler: async function (response: any) {
+              setIsSubmitting(true);
+              toast.loading("Verifying payment transaction...", { id: "verification-toast" });
+              
+              try {
+                const verificationResult = await verifyPayment({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  registrationData: formData,
+                });
+                
+                toast.dismiss("verification-toast");
+                
+                if (verificationResult.success && verificationResult.data) {
+                  const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
+                  
+                  setSuccessData({
+                    registrationId: verificationResult.data.registrationId,
+                    formData: { ...formData },
+                    submissionDate: new Date().toLocaleString()
+                  });
+                  
+                  toast.success(
+                    `Payment verified & registered! Events: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
+                    { duration: 8000 }
+                  );
+                  onClearCart?.();
+                } else {
+                  toast.error(verificationResult.message || "Payment verification failed. Please contact support.");
+                }
+              } catch (verificationError) {
+                console.error("Payment verification error:", verificationError);
+                toast.dismiss("verification-toast");
+                toast.error("An error occurred during payment verification. Please contact support.");
+              } finally {
+                setIsSubmitting(false);
+              }
+            },
+            modal: {
+              ondismiss: function () {
+                setIsSubmitting(false);
+                toast.error("Payment cancelled by user.");
+              },
+            },
+          };
+          
+          const rzp = new (window as any).Razorpay(options);
+          
+          rzp.on("payment.failed", function (response: any) {
+            console.error("Payment failed:", response.error);
+            setIsSubmitting(false);
+            toast.error(`Payment failed: ${response.error.description || "Unknown error"}`);
+          });
+          
+          rzp.open();
+          setIsSubmitting(false);
+        } else {
+          const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
+          
+          setSuccessData({
+            registrationId: result.registrationId || "",
+            formData: { ...formData },
+            submissionDate: new Date().toLocaleString()
+          });
+          
+          toast.success(
+            `Successfully registered! Events registered: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
+            { duration: 8000 }
+          );
+          onClearCart?.();
+          setIsSubmitting(false);
+        }
       } else {
         toast.error(result.message, { duration: 6000 });
+        setIsSubmitting(false);
       }
     } catch (error) {
-      console.error('Registration submission error:', error);
+      console.error("Registration submission error:", error);
       toast.error("Registration failed. Please try again.");
-    } finally {
       setIsSubmitting(false);
+    } finally {
       setIsCheckingDuplicates(false);
     }
   };

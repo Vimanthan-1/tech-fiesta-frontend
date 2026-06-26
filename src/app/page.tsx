@@ -19,8 +19,8 @@ import { workshops } from "@/data/workshops";
 import JourneyMap from "@/components/JourneyMap";
 import ContactForm from "@/components/ContactForm";
 import RegistrationForm from "@/components/RegistrationForm";
-import LoginGate from "@/components/LoginGate";
 import { auth } from "@/lib/firebase";
+import { signInAnonymously } from "firebase/auth";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { FaWhatsapp, FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 
@@ -33,31 +33,16 @@ export default function Home() {
   const [isMatrixActive, setIsMatrixActive] = useState(false);
   const [isSelfDestructing, setIsSelfDestructing] = useState(false);
   const [selfDestructCount, setSelfDestructCount] = useState(5);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedLogin = localStorage.getItem("tf_reviewer_logged_in");
-      if (storedLogin === "true") {
-        setIsLoggedIn(true);
-      }
-    }
-  }, []);
-
-  const handleLoginSuccess = useCallback(() => {
-    setIsLoggedIn(true);
-    localStorage.setItem("tf_reviewer_logged_in", "true");
-  }, []);
-
-  const handleLogout = useCallback(() => {
-    setIsLoggedIn(false);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("tf_reviewer_logged_in");
-    }
     if (auth) {
-      auth.signOut().catch(() => {});
+      signInAnonymously(auth)
+        .then(() => {
+          console.log("Firebase anonymous login successful");
+        })
+        .catch((err) => {
+          console.error("Firebase anonymous login failed:", err);
+        });
     }
-    toast.success("Session locked. Returning to login gate.");
   }, []);
   
   // Lifted selection states for Add-to-Cart registration
@@ -777,33 +762,21 @@ export default function Home() {
                       transition={{ duration: 0.35, ease: "easeInOut" }}
                       className="w-full min-h-[calc(100vh-200px)] py-4 sm:py-8"
                     >
-                      {!isLoggedIn ? (
-                        <LoginGate onLoginSuccess={handleLoginSuccess} />
-                      ) : (
-                        <div className="w-full max-w-5xl mx-auto flex flex-col gap-4">
-                          <div className="flex justify-end">
-                            <button
-                              onClick={handleLogout}
-                              className="px-3.5 py-1.5 bg-red-950/20 border border-red-500/30 hover:border-red-500 text-red-400 hover:text-red-300 text-xs font-mono rounded-lg transition-all duration-300 shadow-[0_2px_8px_rgba(220,38,38,0.15)] hover:shadow-[0_2px_15px_rgba(220,38,38,0.3)] cursor-pointer"
-                            >
-                              🔒 Lock Session (Logout)
-                            </button>
-                          </div>
-                          <div className="w-full px-4 py-6 sm:p-8 rounded-2xl bg-black/75 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)]">
-                            <Suspense fallback={<div className="text-white text-center font-mono py-12">Loading registration form...</div>}>
-                              <RegistrationForm 
-                                selectedEvents={selectedEvents}
-                                selectedWorkshops={selectedWorkshops}
-                                selectedNonTechEvents={selectedNonTechEvents}
-                                onUpdateEvents={setSelectedEvents}
-                                onUpdateWorkshops={setSelectedWorkshops}
-                                onUpdateNonTechEvents={setSelectedNonTechEvents}
-                                onClearCart={handleClearCart}
-                              />
-                            </Suspense>
-                          </div>
+                      <div className="w-full max-w-5xl mx-auto flex flex-col gap-4">
+                        <div className="w-full px-4 py-6 sm:p-8 rounded-2xl bg-black/75 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)]">
+                          <Suspense fallback={<div className="text-white text-center font-mono py-12">Loading registration form...</div>}>
+                            <RegistrationForm 
+                              selectedEvents={selectedEvents}
+                              selectedWorkshops={selectedWorkshops}
+                              selectedNonTechEvents={selectedNonTechEvents}
+                              onUpdateEvents={setSelectedEvents}
+                              onUpdateWorkshops={setSelectedWorkshops}
+                              onUpdateNonTechEvents={setSelectedNonTechEvents}
+                              onClearCart={handleClearCart}
+                            />
+                          </Suspense>
                         </div>
-                      )}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
