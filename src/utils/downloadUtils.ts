@@ -1,4 +1,5 @@
-import jsPDF from "jspdf";
+// jsPDF is NOT statically imported — it is dynamically loaded on demand
+// so it is never bundled into the main registration chunk.
 import { RegistrationFormData } from "@/types";
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
@@ -9,9 +10,11 @@ export interface RegistrationDownloadData extends RegistrationFormData {
 }
 
 /**
- * Generate and download registration data as PDF
+ * Generate and download registration data as PDF.
+ * jsPDF is loaded lazily on demand — not bundled into the initial chunk.
  */
-export const downloadRegistrationPDF = (data: RegistrationDownloadData) => {
+export const downloadRegistrationPDF = async (data: RegistrationDownloadData) => {
+  const { default: jsPDF } = await import("jspdf");
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
   const margin = 20;

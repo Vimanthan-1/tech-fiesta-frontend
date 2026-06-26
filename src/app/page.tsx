@@ -1,28 +1,89 @@
 "use client";
 
-import { useState, useEffect, Suspense, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 import { Event, Workshop, SelectedItem } from "@/types";
-import PixelBlast from "@/components/PixelBlast";
-import MatrixRain from "@/components/MatrixRain";
-import LoadingScreen from "@/components/LoadingScreen";
-import ScrambledText from "@/components/ScrambledText";
-import CountdownTimer from "@/components/CountdownTimer";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
-import EventGrid from "@/components/EventGrid";
-import WorkshopGrid from "@/components/WorkshopGrid";
-import GlareHover from "@/components/ReactBits/GlareHover/GlareHover";
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
-import JourneyMap from "@/components/JourneyMap";
-import ContactForm from "@/components/ContactForm";
-import RegistrationForm from "@/components/RegistrationForm";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { FaWhatsapp, FaInstagram, FaLinkedin } from "react-icons/fa";
+
+// ─── Statically loaded (tiny, needed immediately) ────────────────────────────
+import LoadingScreen from "@/components/LoadingScreen";
+import CountdownTimer from "@/components/CountdownTimer";
+import ScrambledText from "@/components/ScrambledText";
+
+// ─── Dynamically loaded (heavy / not needed at paint) ─────────────────────────
+const PixelBlast = dynamic(() => import("@/components/PixelBlast"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const NavBar = dynamic(() => import("@/components/NavBar"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const Footer = dynamic(() => import("@/components/Footer"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const JourneyMap = dynamic(() => import("@/components/JourneyMap"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const EventGrid = dynamic(() => import("@/components/EventGrid"), {
+  ssr: false,
+  loading: () => (
+    <div className="text-white text-center font-mono py-12 animate-pulse">
+      Loading events...
+    </div>
+  ),
+});
+
+const WorkshopGrid = dynamic(() => import("@/components/WorkshopGrid"), {
+  ssr: false,
+  loading: () => (
+    <div className="text-white text-center font-mono py-12 animate-pulse">
+      Loading workshops...
+    </div>
+  ),
+});
+
+const ContactForm = dynamic(() => import("@/components/ContactForm"), {
+  ssr: false,
+  loading: () => null,
+});
+
+// RegistrationForm: heaviest chunk (firebase writes + jsPDF) — load async
+const RegistrationForm = dynamic(() => import("@/components/RegistrationForm"), {
+  ssr: false,
+  loading: () => (
+    <div className="text-white text-center font-mono py-12 animate-pulse">
+      Loading registration form...
+    </div>
+  ),
+});
+
+const GlareHover = dynamic(
+  () => import("@/components/ReactBits/GlareHover/GlareHover"),
+  { ssr: false, loading: () => null }
+);
+
+// MatrixRain is an easter egg — only needed on user trigger, completely deferred
+const MatrixRain = dynamic(() => import("@/components/MatrixRain"), {
+  ssr: false,
+  loading: () => null,
+});
+
+// ─── Firebase (deferred — only needed for anonymous sign-in check) ─────────────
 import { auth } from "@/lib/firebase";
 import { signInAnonymously } from "firebase/auth";
-import { Mail, Phone, MapPin } from "lucide-react";
-import { FaWhatsapp, FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
+
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -764,17 +825,15 @@ export default function Home() {
                     >
                       <div className="w-full max-w-5xl mx-auto flex flex-col gap-4">
                         <div className="w-full px-4 py-6 sm:p-8 rounded-2xl bg-black/75 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)]">
-                          <Suspense fallback={<div className="text-white text-center font-mono py-12">Loading registration form...</div>}>
-                            <RegistrationForm 
-                              selectedEvents={selectedEvents}
-                              selectedWorkshops={selectedWorkshops}
-                              selectedNonTechEvents={selectedNonTechEvents}
-                              onUpdateEvents={setSelectedEvents}
-                              onUpdateWorkshops={setSelectedWorkshops}
-                              onUpdateNonTechEvents={setSelectedNonTechEvents}
-                              onClearCart={handleClearCart}
-                            />
-                          </Suspense>
+                          <RegistrationForm
+                            selectedEvents={selectedEvents}
+                            selectedWorkshops={selectedWorkshops}
+                            selectedNonTechEvents={selectedNonTechEvents}
+                            onUpdateEvents={setSelectedEvents}
+                            onUpdateWorkshops={setSelectedWorkshops}
+                            onUpdateNonTechEvents={setSelectedNonTechEvents}
+                            onClearCart={handleClearCart}
+                          />
                         </div>
                       </div>
                     </motion.div>
@@ -793,7 +852,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Secret Matrix Overlay */}
+      {/* Secret Matrix Overlay — dynamically imported easter egg */}
       {isMatrixActive && (
         <MatrixRain onClose={() => setIsMatrixActive(false)} />
       )}
