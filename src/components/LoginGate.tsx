@@ -33,8 +33,6 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
         toast.success("Authentication successful! Decrypting portal...");
         onLoginSuccess();
       } catch (err: any) {
-        console.error("Firebase Login Error:", err);
-        
         // Fallback check: If Firebase auth fails (e.g. database offline or config not loaded on Vercel yet),
         // we allow standard verification against the reviewer credentials to prevent blockages during application review.
         if (formattedEmail === testEmail && password === testPassword) {
@@ -155,7 +153,6 @@ export default function LoginGate({ onLoginSuccess }: LoginGateProps) {
             )}
           </button>
         </form>
-
         {/* Highlighted Reviewer Credentials section */}
         <div className="mt-6 pt-5 border-t border-red-500/10">
           <div className="bg-red-950/15 border border-red-500/30 rounded-xl p-4">
