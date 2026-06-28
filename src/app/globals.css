@@ -87,6 +87,15 @@ body {
   opacity: 0;
 }
 
+
+@keyframes shine {
+  0% {
+    transform: translateX(-250%);
+  }
+  100% {
+    transform: translateX(650%);
+  }
+}
 .anim-delay-200 {
   animation-delay: 200ms;
 }

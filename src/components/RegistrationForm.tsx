@@ -7,6 +7,7 @@ import { Event, RegistrationFormData, TeamMember, PaymentQR, SelectedItem } from
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
 import { validateEmail, validatePhone } from "@/utils/registration";
+<<<<<<< HEAD
 import { CheckCircle, MapPin } from "lucide-react";
 import { submitRegistration, checkDuplicateRegistration, createPaymentOrder, verifyPayment } from "@/services/registrationService";
 
@@ -24,6 +25,14 @@ const loadRazorpayScript = () => {
     document.body.appendChild(script);
   });
 };
+=======
+import {
+  MapPin,
+  CheckCircle,
+  Plus,
+} from "lucide-react";
+import { submitRegistration, checkDuplicateRegistration } from "@/services/registrationService";
+
 import { downloadRegistrationPDF, downloadRegistrationText, downloadRegistrationJSON, RegistrationDownloadData } from "@/utils/downloadUtils";
 
 interface RegistrationFormProps {
@@ -70,6 +79,7 @@ export default function RegistrationForm({
     formData: RegistrationFormData;
     submissionDate: string;
   } | null>(null);
+   const [techFiestaPass, setTechFiestaPass] = useState(false);
 
   // Payment QR data - Free entry, individual QRs for each event/workshop
   const generatePaymentQRs = (): PaymentQR[] => {
@@ -790,6 +800,111 @@ export default function RegistrationForm({
             </div>
           )}
 
+      {/* ================= SPECIAL PASS ================= */}
+
+<div className="mt-8 rounded-2xl overflow-hidden border border-red-500/25 bg-gradient-to-br from-[#180606] via-[#0d0505] to-black shadow-[0_0_30px_rgba(220,38,38,0.18)]">
+
+  {/* Animated Shine */}
+  <div className="relative overflow-hidden">
+
+    <div className="absolute inset-0">
+      <div className="absolute -left-40 top-0 h-full w-32 rotate-12 bg-gradient-to-r from-transparent via-red-400/20 to-transparent animate-[shine_5s_linear_infinite]" />
+    </div>
+
+    <div className="relative p-5">
+
+      <div className="flex items-center justify-between">
+
+        {/* Left */}
+        <div>
+
+          <p className="text-[11px] uppercase tracking-[4px] text-red-400 font-mono">
+            SPECIAL PASS
+          </p>
+
+          <h3 className="mt-1 text-2xl font-bold text-white">
+            Tech Fiesta Pass
+          </h3>
+
+          <p className="mt-2 text-sm text-gray-400 max-w-sm">
+            Includes <span className="text-red-400 font-semibold">any 3 registrations</span>
+            <br />
+            (Events, Workshops or a Mix of both)
+          </p>
+
+        </div>
+
+        {/* Premium Vertical Barcode */}
+<div className="hidden md:flex items-center rounded-lg border border-red-500/20 bg-black/30 px-3 py-3 backdrop-blur-sm">
+
+  <div className="flex gap-[2px]">
+
+    {[2,4,2,3,5,2,4,2,3,2,5,2,4,3,2,5].map((w, i) => (
+      <div
+        key={i}
+        style={{ width: `${w}px` }}
+        className="h-[92px] rounded-full bg-gradient-to-b from-red-100 via-red-400 to-red-700"
+      />
+    ))}
+
+  </div>
+
+  <div className="ml-3 flex flex-col items-center">
+    <span className="text-[9px] tracking-[2px] text-red-400 [writing-mode:vertical-rl] rotate-180 font-mono">
+      TECHFIESTA2026
+    </span>
+  </div>
+
+</div>
+</div>
+
+      {/* Bottom */}
+
+      <div className="mt-5 flex items-center justify-between">
+
+        <div>
+
+          <p className="text-3xl font-bold text-red-400">
+            ₹149
+          </p>
+
+          <p className="text-xs text-gray-500">
+            One Pass • Three Registrations
+          </p>
+
+        </div>
+
+        {!techFiestaPass ? (
+
+          <button
+            type="button"
+            onClick={() => setTechFiestaPass(true)}
+            className="flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 font-semibold text-white transition hover:bg-red-700 hover:scale-105"
+          >
+            <Plus className="h-4 w-4" />
+            Add Pass
+          </button>
+
+        ) : (
+
+          <button
+            type="button"
+            onClick={() => setTechFiestaPass(false)}
+            className="flex items-center gap-2 rounded-lg border border-green-500 bg-green-500/15 px-5 py-2.5 font-semibold text-green-400 transition hover:bg-green-500/20"
+          >
+            <CheckCircle className="h-4 w-4" />
+            Pass Added
+          </button>
+
+        )}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
           {/* Consent */}
           <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
             <label className="flex items-start space-x-4 cursor-pointer">
