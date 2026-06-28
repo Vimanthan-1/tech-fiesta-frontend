@@ -6,9 +6,9 @@ import toast from "react-hot-toast";
 import { Event, RegistrationFormData, TeamMember, PaymentQR, SelectedItem } from "@/types";
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
-import { validateEmail, validatePhone } from "@/utils/registration";
-<<<<<<< HEAD
-import { CheckCircle, MapPin } from "lucide-react";
+import { validateEmail, validatePhone } from "@/utils/registration"
+
+import { CheckCircle, MapPin, Plus  } from "lucide-react";
 import { submitRegistration, checkDuplicateRegistration, createPaymentOrder, verifyPayment } from "@/services/registrationService";
 
 const loadRazorpayScript = () => {
@@ -18,20 +18,14 @@ const loadRazorpayScript = () => {
       return;
     }
     const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";  
     script.async = true;
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
     document.body.appendChild(script);
   });
 };
-=======
-import {
-  MapPin,
-  CheckCircle,
-  Plus,
-} from "lucide-react";
-import { submitRegistration, checkDuplicateRegistration } from "@/services/registrationService";
+
 
 import { downloadRegistrationPDF, downloadRegistrationText, downloadRegistrationJSON, RegistrationDownloadData } from "@/utils/downloadUtils";
 
