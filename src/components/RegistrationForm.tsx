@@ -63,6 +63,7 @@ export default function RegistrationForm({
     selectedNonTechEvents: selectedNonTechEvents,
     transactionIds: {},
     hasConsented: false,
+    selectedPass: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -452,9 +453,11 @@ export default function RegistrationForm({
       selectedNonTechEvents: [],
       transactionIds: {},
       hasConsented: false,
+      selectedPass: null,
     });
     setErrors({});
     setSuccessData(null);
+    setTechFiestaPass(false);
     onClearCart?.();
     toast.success("Form reset! You can now submit a new registration.", { duration: 3000 });
   };
@@ -962,7 +965,10 @@ export default function RegistrationForm({
 
           <button
             type="button"
-            onClick={() => setTechFiestaPass(true)}
+            onClick={() => {
+              setTechFiestaPass(true);
+              handleInputChange("selectedPass", 1);
+            }}
             className="flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 font-semibold text-white transition hover:bg-red-700 hover:scale-105"
           >
             <Plus className="h-4 w-4" />
@@ -973,7 +979,10 @@ export default function RegistrationForm({
 
           <button
             type="button"
-            onClick={() => setTechFiestaPass(false)}
+            onClick={() => {
+              setTechFiestaPass(false);
+              handleInputChange("selectedPass", null);
+            }}
             className="flex items-center gap-2 rounded-lg border border-green-500 bg-green-500/15 px-5 py-2.5 font-semibold text-green-400 transition hover:bg-green-500/20"
           >
             <CheckCircle className="h-4 w-4" />

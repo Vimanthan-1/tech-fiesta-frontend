@@ -76,6 +76,7 @@ export interface RegistrationFormData {
 
   // Verification
   hasConsented: boolean;
+  selectedPass?: number | null;
 }
 
 export interface RegistrationProps {
