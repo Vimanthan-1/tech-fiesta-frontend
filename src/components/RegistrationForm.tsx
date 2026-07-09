@@ -466,17 +466,107 @@ export default function RegistrationForm({
           <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 font-[family-name:var(--font-bebas-neue)] tracking-wider text-center text-white">
             Registration Center
           </h2>
-          <p className="text-xl sm:text-2xl font-semibold text-red-500 mb-8 font-mono tracking-widest uppercase text-center">
+          <p className="text-xl sm:text-2xl font-semibold text-red-500 mb-4 font-mono tracking-widest uppercase text-center">
             // SECURING ENTRY PROTOCOL
           </p>
-          <p className="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto px-2 text-center font-mono tracking-wide mb-8">
-            Register for events and workshops to cement your legacy. Entry is free.
+          <p className="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto px-2 text-center font-mono tracking-wide mb-2">
+            Register for events and workshops to cement your legacy.
           </p>
+          <p className="text-sm sm:text-base text-center font-mono mb-8">
+            <span className="text-gray-400">Access via </span>
+            <span className="text-white font-bold">Odyssey Pass</span>
+            <span className="text-red-400 font-bold"> · ₹149</span>
+            <span className="text-gray-500"> per person</span>
+          </p>
+        </div>
+
+        {/* Combo Pass Banner */}
+        <div className="mb-8 sm:mb-10 w-full max-w-5xl mx-auto">
+          <div className="bg-gradient-to-br from-black/90 via-red-950/20 to-black/90 border border-red-500/40 rounded-2xl p-5 sm:p-6 shadow-[0_1px_8px_rgba(220,38,38,0.06)] overflow-hidden relative">
+
+            {/* Subtle top accent line */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent" />
+
+            {/* Header row */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-red-600/20 border border-red-500/35 flex items-center justify-center">
+                <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-mono text-red-400/90 tracking-widest uppercase mb-0.5">// ODYSSEY_PASS · ALL-ACCESS</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-white font-[family-name:var(--font-bebas-neue)] tracking-wider leading-none">
+                  Combo Pass — One Pass, Full Access
+                </h3>
+              </div>
+              <div className="flex-shrink-0 text-right bg-red-600/15 border border-red-500/30 rounded-xl px-4 py-2">
+                <span className="text-3xl font-bold text-white font-[family-name:var(--font-bebas-neue)] tracking-wide">₹149</span>
+                <p className="text-gray-400 text-xs font-mono">per person</p>
+              </div>
+            </div>
+
+            <p className="text-gray-300 text-sm font-mono mb-5 leading-relaxed border-l-2 border-red-500/50 pl-3">
+              One pass. Three access points. Covers all events at Tech Fiesta 2.0 — no separate entry fees.
+            </p>
+
+            {/* 3 pillars — uniform styling */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Pillar 1 — Tech Events */}
+              <div className="flex items-center gap-3 bg-white/[0.04] border border-red-500/25 rounded-xl p-4">
+                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-red-600/20 border border-red-500/30 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2" />
+                  </svg>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white font-semibold text-sm leading-tight">Technical Events</p>
+                  <p className="text-gray-400 text-xs font-mono mt-0.5">Coding, hardware &amp; more</p>
+                </div>
+              </div>
+
+              {/* Pillar 2 — Workshops */}
+              <div className="flex items-center gap-3 bg-white/[0.04] border border-red-500/25 rounded-xl p-4">
+                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-red-600/20 border border-red-500/30 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white font-semibold text-sm leading-tight">Workshops</p>
+                  <p className="text-gray-400 text-xs font-mono mt-0.5">Hands-on expert sessions</p>
+                </div>
+              </div>
+
+              {/* Pillar 3 — Non-Tech Events */}
+              <div className="flex items-center gap-3 bg-white/[0.04] border border-red-500/25 rounded-xl p-4">
+                <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-red-600/20 border border-red-500/30 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-white font-semibold text-sm leading-tight">Non-Tech Events</p>
+                  <p className="text-gray-400 text-xs font-mono mt-0.5">Quizzes, debates &amp; more</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom note */}
+            <div className="mt-5 pt-4 border-t border-white/8 flex items-center gap-2">
+              <svg className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+              <p className="text-gray-500 text-xs font-mono">
+                Select your preferred events &amp; workshops below. Your pass covers all chosen items.
+              </p>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 w-full">
           {/* Personal Information */}
-          <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
+          <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
             <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center font-[family-name:var(--font-bebas-neue)] tracking-wider">
               <span className="break-words">Personal Information</span>
             </h3>
@@ -487,8 +577,8 @@ export default function RegistrationForm({
                   type="text"
                   required
                   placeholder="Enter your full name"
-                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300 ${
-                    errors.name ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]' : 'border-red-500/20'
+                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_8px_rgba(239,68,68,0.12)] transition-all duration-300 ${
+                    errors.name ? 'border-red-500/60 shadow-[0_0_6px_rgba(239,68,68,0.08)]' : 'border-red-500/20'
                   }`}
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
@@ -502,8 +592,8 @@ export default function RegistrationForm({
                   type="text"
                   required
                   placeholder="e.g., Computer Science, Electronics, etc."
-                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300 ${
-                    errors.department ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]' : 'border-red-500/20'
+                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_8px_rgba(239,68,68,0.12)] transition-all duration-300 ${
+                    errors.department ? 'border-red-500/60 shadow-[0_0_6px_rgba(239,68,68,0.08)]' : 'border-red-500/20'
                   }`}
                   value={formData.department}
                   onChange={(e) => handleInputChange("department", e.target.value)}
@@ -517,8 +607,8 @@ export default function RegistrationForm({
                   type="email"
                   required
                   placeholder="Enter your email address"
-                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300 ${
-                    errors.email ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]' : 'border-red-500/20'
+                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_8px_rgba(239,68,68,0.12)] transition-all duration-300 ${
+                    errors.email ? 'border-red-500/60 shadow-[0_0_6px_rgba(239,68,68,0.08)]' : 'border-red-500/20'
                   }`}
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
@@ -532,8 +622,8 @@ export default function RegistrationForm({
                   type="tel"
                   required
                   placeholder="+91 98765 43210 or 9876543210"
-                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300 ${
-                    errors.whatsapp ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]' : 'border-red-500/20'
+                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_8px_rgba(239,68,68,0.12)] transition-all duration-300 ${
+                    errors.whatsapp ? 'border-red-500/60 shadow-[0_0_6px_rgba(239,68,68,0.08)]' : 'border-red-500/20'
                   }`}
                   value={formData.whatsapp}
                   onChange={(e) => handleInputChange("whatsapp", e.target.value)}
@@ -547,8 +637,8 @@ export default function RegistrationForm({
                   type="text"
                   required
                   placeholder="Enter your college/university name"
-                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300 ${
-                    errors.college ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]' : 'border-red-500/20'
+                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_8px_rgba(239,68,68,0.12)] transition-all duration-300 ${
+                    errors.college ? 'border-red-500/60 shadow-[0_0_6px_rgba(239,68,68,0.08)]' : 'border-red-500/20'
                   }`}
                   value={formData.college}
                   onChange={(e) => handleInputChange("college", e.target.value)}
@@ -560,8 +650,8 @@ export default function RegistrationForm({
                 <label className="block text-gray-300 text-sm font-medium mb-2">Year of Study *</label>
                 <select
                   required
-                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300 ${
-                    errors.year ? 'border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.15)]' : 'border-red-500/20'
+                  className={`w-full px-4 py-3 bg-white/5 backdrop-blur-sm border rounded-lg text-white focus:outline-none focus:border-red-500 focus:bg-white/10 focus:shadow-[0_0_8px_rgba(239,68,68,0.12)] transition-all duration-300 ${
+                    errors.year ? 'border-red-500/60 shadow-[0_0_6px_rgba(239,68,68,0.08)]' : 'border-red-500/20'
                   }`}
                   value={formData.year}
                   onChange={(e) => handleInputChange("year", e.target.value)}
@@ -579,7 +669,7 @@ export default function RegistrationForm({
           </div>
 
           {/* Event Selection */}
-          <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
+          <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
             <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex flex-wrap items-center gap-2 font-[family-name:var(--font-bebas-neue)] tracking-wider">
               <span className="break-words">Select Events & Workshops</span>
             </h3>
@@ -673,7 +763,7 @@ export default function RegistrationForm({
 
           {/* Team Details */}
           {formData.isTeamEvent && (
-            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
+            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
               <div className="flex flex-wrap items-center justify-between mb-4 sm:mb-6">
                 <h3 className="text-xl sm:text-2xl font-bold text-white font-[family-name:var(--font-bebas-neue)] tracking-wider">Team Details</h3>
                 <div className="text-sm bg-red-500/20 text-red-300 px-3 py-1 rounded-full">
@@ -749,7 +839,7 @@ export default function RegistrationForm({
 
           {/* Registration Summary */}
           {(formData.selectedEvents.length > 0 || formData.selectedWorkshops.length > 0 || formData.selectedNonTechEvents.length > 0) && (
-            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
+            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 flex items-center font-[family-name:var(--font-bebas-neue)] tracking-wider">
                 <span className="break-words">Registration Summary</span>
               </h3>
@@ -900,7 +990,7 @@ export default function RegistrationForm({
 
 </div>
           {/* Consent */}
-          <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
+          <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
             <label className="flex items-start space-x-4 cursor-pointer">
               <input
                 type="checkbox"
@@ -924,7 +1014,7 @@ export default function RegistrationForm({
             <button
               type="submit"
               disabled={!formData.hasConsented || isSubmitting || isCheckingDuplicates || successData !== null}
-              className="w-full max-w-md mx-auto py-3 bg-red-600 text-white font-bold text-base rounded-xl hover:bg-red-700 transition-all duration-200 transform hover:scale-105 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
+              className="w-full max-w-md mx-auto py-3 bg-red-600 text-white font-bold text-base rounded-xl hover:bg-red-700 transition-all duration-200 transform hover:scale-105 shadow-[0_2px_8px_rgba(220,38,38,0.15)] hover:shadow-[0_4px_12px_rgba(220,38,38,0.25)] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
             >
               {isCheckingDuplicates ? (
                 <>
@@ -960,7 +1050,7 @@ export default function RegistrationForm({
 
           {/* Download Section - Show after successful registration */}
           {successData && (
-            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_0_25px_rgba(220,38,38,0.15)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
+            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
               <h3 className="text-xl sm:text-2xl font-bold text-red-500 mb-4 flex items-center font-[family-name:var(--font-bebas-neue)] tracking-wider">
                 <CheckCircle className="w-6 h-6 mr-3" />
                 Registration Successful!

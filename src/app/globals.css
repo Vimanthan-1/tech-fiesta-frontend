@@ -118,12 +118,12 @@ body {
   transition: all 0.2s ease-in-out;
 }
 .cyber-border-dim:hover {
-  border-color: rgba(239, 68, 68, 0.7);
-  box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  border-color: rgba(239, 68, 68, 0.55);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
 }
 
 .cyber-glow-text {
-  text-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+  text-shadow: 0 0 5px rgba(239, 68, 68, 0.35);
 }
 
 @keyframes laser-scan-vertical {
