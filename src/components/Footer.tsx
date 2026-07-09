@@ -290,7 +290,7 @@ const Footer: React.FC<FooterProps> = ({
               </a>
             </div>
             <span className="font-mono text-[9px] text-gray-500/70 mt-1 mr-1 pointer-events-none select-none text-[9px]">
-              Asymmetric@citchennai.net
+              asymmetric@citchennai.net
             </span>
           </div>
         </div>

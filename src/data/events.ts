@@ -63,17 +63,17 @@ export const events: Event[] = [
 
   {
     id: 4,
-    title: "LeetCode Speed Relay",
+    title: "Common Coding Challenge",
     type: "tech" as const,
     date: "2026-03-17",
     time: "11:00 AM - 1:00 PM",
     venue: "Programming Lab",
     description:
-      "Teams of 3-4 members solve a LeetCode problem together. Each participant gets only five minutes at the keyboard before handing over control. No communication is allowed during switches.",
+      "A common coding challenge open to all skill levels. Participants solve a curated set of programming problems covering fundamental data structures, algorithms, and logic. Race against time and peers to achieve the highest score and claim the top spot on the leaderboard.",
     speakers: ["Programming Mentors"],
     capacity: 60,
     registrations: 0,
-    tags: ["LeetCode", "Programming", "Teamwork"],
+    tags: ["Coding", "Algorithms", "Data Structures", "Competition"],
     image: "/images/reverse-code.jpg",
     price: "₹69",
     maxTeamSize: 4,

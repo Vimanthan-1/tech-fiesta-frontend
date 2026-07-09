@@ -760,8 +760,8 @@ export default function Home() {
                                 <Mail className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                                 <div>
                                   <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">General</h4>
-                                  <a href="mailto:Asymmetric@citchennai.net" className="text-white hover:text-red-400 text-sm font-semibold break-all">
-                                    Asymmetric@citchennai.net
+                                  <a href="mailto:asymmetric@citchennai.net" className="text-white hover:text-red-400 text-sm font-semibold break-all">
+                                    asymmetric@citchennai.net
                                   </a>
                                 </div>
                               </div>
@@ -770,8 +770,8 @@ export default function Home() {
                                 <Phone className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                                 <div>
                                   <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">Helpline</h4>
-                                  <a href="tel:+911234567890" className="text-white hover:text-red-400 text-sm font-semibold">
-                                    +91 12345 67890
+                                  <a href="tel:+917402059715" className="text-white hover:text-red-400 text-sm font-semibold">
+                                    +91 74020 59715
                                   </a>
                                 </div>
                               </div>
