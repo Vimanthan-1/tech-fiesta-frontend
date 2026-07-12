@@ -297,83 +297,198 @@ export default function RegistrationForm({
           
           toast.dismiss("payment-toast");
           
-          const options = {
-            key: key,
-            amount: amount,
-            currency: currency,
-            name: "Tech Fiesta 2026",
-            description: "Registration Fee",
-            image: "/tech_fiesta_odyssey.png",
-            order_id: orderId,
-            prefill: {
-              name: formData.name,
-              email: formData.email,
-              contact: formData.whatsapp,
-            },
-            notes: {
-              college: formData.college,
-              department: formData.department,
-            },
-            theme: {
-              color: "#DC2626",
-            },
-            handler: async function (response: any) {
-              setIsSubmitting(true);
-              toast.loading("Verifying payment transaction...", { id: "verification-toast" });
+          // Determine whether we need the cross-domain payment bridge
+          const isVerifiedDomain = 
+            typeof window !== "undefined" && 
+            (window.location.hostname === "tech-fiesta-frontend.vercel.app" || 
+             window.location.hostname === "localhost" || 
+             window.location.hostname === "127.0.0.1");
+
+          if (!isVerifiedDomain) {
+            toast.loading("Redirecting to secure payment bridge...", { id: "payment-toast" });
+            
+            const targetOrigin = "https://tech-fiesta-frontend.vercel.app";
+            const payUrl = `${targetOrigin}/pay?key=${encodeURIComponent(key)}&orderId=${encodeURIComponent(orderId)}&amount=${amount}&currency=${currency}&name=${encodeURIComponent("Tech Fiesta 2026")}&description=${encodeURIComponent("Registration Fee")}&prefill_name=${encodeURIComponent(formData.name)}&prefill_email=${encodeURIComponent(formData.email)}&prefill_contact=${encodeURIComponent(formData.whatsapp)}&theme_color=${encodeURIComponent("#DC2626")}&college=${encodeURIComponent(formData.college)}&department=${encodeURIComponent(formData.department)}&origin=${encodeURIComponent(window.location.origin)}`;
+
+            toast.dismiss("payment-toast");
+
+            // Open secure payment popup
+            const popup = window.open(payUrl, "Razorpay Secure Payment", "width=550,height=750,status=no,titlebar=no,menubar=no");
+            
+            if (!popup || popup.closed || typeof popup.closed === "undefined") {
+              // Popup blocker active
+              toast.error(
+                "Payment window was blocked by your browser. Please click the button below to complete your payment.",
+                { id: "payment-toast", duration: 10000 }
+              );
               
-              try {
-                const verificationResult = await verifyPayment({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                  registrationData: formData,
+              const overlay = document.createElement("div");
+              overlay.id = "payment-popup-overlay";
+              overlay.className = "fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4";
+              overlay.innerHTML = `
+                <div class="bg-black border border-red-500/30 p-6 rounded-2xl max-w-sm w-full text-center font-mono">
+                  <h3 class="text-white text-lg font-bold mb-4">// POPUP BLOCKED</h3>
+                  <p class="text-gray-400 text-sm mb-6">Your browser blocked the secure payment window. Please click below to open it manually.</p>
+                  <a href="${payUrl}" target="_blank" id="pay-popup-trigger-btn" class="inline-block w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-bold uppercase transition-all duration-300">
+                    Open Payment Window
+                  </a>
+                  <button id="pay-popup-cancel-btn" class="mt-4 text-gray-500 hover:text-gray-400 text-xs uppercase tracking-wider block mx-auto">
+                    Cancel
+                  </button>
+                </div>
+              `;
+              document.body.appendChild(overlay);
+
+              const triggerBtn = document.getElementById("pay-popup-trigger-btn");
+              const cancelBtn = document.getElementById("pay-popup-cancel-btn");
+
+              if (triggerBtn) {
+                triggerBtn.addEventListener("click", () => {
+                  overlay.remove();
+                  setIsSubmitting(true);
+                  toast.loading("Verifying payment window...", { id: "payment-toast" });
                 });
+              }
+              if (cancelBtn) {
+                cancelBtn.addEventListener("click", () => {
+                  overlay.remove();
+                  setIsSubmitting(false);
+                  toast.error("Payment cancelled.");
+                });
+              }
+            }
+
+            // Listen for message from the popup
+            const messageHandler = async function (event: MessageEvent) {
+              if (event.origin !== targetOrigin) return;
+              
+              if (event.data.type === "payment.success") {
+                window.removeEventListener("message", messageHandler);
+                setIsSubmitting(true);
+                toast.loading("Verifying payment transaction...", { id: "verification-toast" });
                 
-                toast.dismiss("verification-toast");
-                
-                if (verificationResult.success && verificationResult.data) {
-                  const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
-                  
-                  setSuccessData({
-                    registrationId: verificationResult.data.registrationId,
-                    formData: { ...formData },
-                    submissionDate: new Date().toLocaleString()
+                try {
+                  const verificationResult = await verifyPayment({
+                    razorpay_order_id: event.data.data.razorpay_order_id,
+                    razorpay_payment_id: event.data.data.razorpay_payment_id,
+                    razorpay_signature: event.data.data.razorpay_signature,
+                    registrationData: formData,
                   });
                   
-                  toast.success(
-                    `Payment verified & registered! Events: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
-                    { duration: 8000 }
-                  );
-                  onClearCart?.();
-                } else {
-                  toast.error(verificationResult.message || "Payment verification failed. Please contact support.");
+                  toast.dismiss("verification-toast");
+                  
+                  if (verificationResult.success && verificationResult.data) {
+                    const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
+                    
+                    setSuccessData({
+                      registrationId: verificationResult.data.registrationId,
+                      formData: { ...formData },
+                      submissionDate: new Date().toLocaleString()
+                    });
+                    
+                    toast.success(
+                      `Payment verified & registered! Events: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
+                      { duration: 8000 }
+                    );
+                    onClearCart?.();
+                  } else {
+                    toast.error(verificationResult.message || "Payment verification failed. Please contact support.");
+                  }
+                } catch (verificationError) {
+                  console.error("Payment verification error:", verificationError);
+                  toast.dismiss("verification-toast");
+                  toast.error("An error occurred during payment verification. Please contact support.");
+                } finally {
+                  setIsSubmitting(false);
                 }
-              } catch (verificationError) {
-                console.error("Payment verification error:", verificationError);
-                toast.dismiss("verification-toast");
-                toast.error("An error occurred during payment verification. Please contact support.");
-              } finally {
+              } else if (event.data.type === "payment.failed") {
+                window.removeEventListener("message", messageHandler);
                 setIsSubmitting(false);
+                toast.error("Payment failed or cancelled.");
               }
-            },
-            modal: {
-              ondismiss: function () {
-                setIsSubmitting(false);
-                toast.error("Payment cancelled by user.");
-              },
-            },
-          };
-          
-          const rzp = new (window as any).Razorpay(options);
-          
-          rzp.on("payment.failed", function (response: any) {
-            console.error("Payment failed:", response.error);
+            };
+
+            window.addEventListener("message", messageHandler);
             setIsSubmitting(false);
-            toast.error(`Payment failed: ${response.error.description || "Unknown error"}`);
-          });
-          
-          rzp.open();
-          setIsSubmitting(false);
+          } else {
+            const options = {
+              key: key,
+              amount: amount,
+              currency: currency,
+              name: "Tech Fiesta 2026",
+              description: "Registration Fee",
+              image: "/tech_fiesta_odyssey.png",
+              order_id: orderId,
+              prefill: {
+                name: formData.name,
+                email: formData.email,
+                contact: formData.whatsapp,
+              },
+              notes: {
+                college: formData.college,
+                department: formData.department,
+              },
+              theme: {
+                color: "#DC2626",
+              },
+              handler: async function (response: any) {
+                setIsSubmitting(true);
+                toast.loading("Verifying payment transaction...", { id: "verification-toast" });
+                
+                try {
+                  const verificationResult = await verifyPayment({
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_signature: response.razorpay_signature,
+                    registrationData: formData,
+                  });
+                  
+                  toast.dismiss("verification-toast");
+                  
+                  if (verificationResult.success && verificationResult.data) {
+                    const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
+                    
+                    setSuccessData({
+                      registrationId: verificationResult.data.registrationId,
+                      formData: { ...formData },
+                      submissionDate: new Date().toLocaleString()
+                    });
+                    
+                    toast.success(
+                      `Payment verified & registered! Events: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
+                      { duration: 8000 }
+                    );
+                    onClearCart?.();
+                  } else {
+                    toast.error(verificationResult.message || "Payment verification failed. Please contact support.");
+                  }
+                } catch (verificationError) {
+                  console.error("Payment verification error:", verificationError);
+                  toast.dismiss("verification-toast");
+                  toast.error("An error occurred during payment verification. Please contact support.");
+                } finally {
+                  setIsSubmitting(false);
+                }
+              },
+              modal: {
+                ondismiss: function () {
+                  setIsSubmitting(false);
+                  toast.error("Payment cancelled by user.");
+                },
+              },
+            };
+            
+            const rzp = new (window as any).Razorpay(options);
+            
+            rzp.on("payment.failed", function (response: any) {
+              console.error("Payment failed:", response.error);
+              setIsSubmitting(false);
+              toast.error(`Payment failed: ${response.error.description || "Unknown error"}`);
+            });
+            
+            rzp.open();
+            setIsSubmitting(false);
+          }
         } else {
           const eventCount = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
           
