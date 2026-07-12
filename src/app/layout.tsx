@@ -7,9 +7,9 @@ export const metadata: Metadata = {
   description:
     "Tech Fiesta 2.0: The Odyssey — the flagship annual technical festival of the Asymmetric Club at CIT. Register for events and workshops.",
   icons: {
-    icon: "/secret_brackets.jpg",
-    shortcut: "/secret_brackets.jpg",
-    apple: "/secret_brackets.jpg",
+    icon: "/tech_fiesta_odyssey.png",
+    shortcut: "/tech_fiesta_odyssey.png",
+    apple: "/tech_fiesta_odyssey.png",
   },
   openGraph: {
     title: "Tech Fiesta 2.0 - The Odyssey",
