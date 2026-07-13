@@ -11,8 +11,8 @@ interface TimeLeft {
 
 const CountdownTimer: React.FC = () => {
   const calculateTimeLeft = (): TimeLeft => {
-    // Set target date to July 24, 2026 (Tech Fiesta 2.0)
-    const targetDate = new Date("2026-07-24T00:00:00").getTime();
+    // Set target date to August 7, 2026 (Tech Fiesta 2.0)
+    const targetDate = new Date("2026-08-07T00:00:00").getTime();
     const difference = targetDate - new Date().getTime();
 
     let days = "00";
