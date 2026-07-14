@@ -17,7 +17,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Presentation", "Research", "Innovation"],
     image: "/images/project-presentation.jpg",
-    price: "₹69",
+    price: "₹70",
   },
 
   {
@@ -34,7 +34,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Quiz", "Coding", "Debugging", "Logic"],
     image: "/images/prompt-engineering.jpg",
-    price: "₹69",
+    price: "₹70",
   },
    {
   id: 3,
@@ -57,7 +57,7 @@ export const events: Event[] = [
     "Product Thinking"
   ],
   image: "/images/ui-challenge.jpg",
-  price: "₹69",
+  price: "₹70",
   maxTeamSize: 3,
 },
 
@@ -75,7 +75,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Coding", "Algorithms", "Data Structures", "Competition"],
     image: "/images/reverse-code.jpg",
-    price: "₹69",
+    price: "₹70",
     maxTeamSize: 4,
   },
 
@@ -93,7 +93,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Cybersecurity", "AR", "QR", "Treasure Hunt"],
     image: "/images/escape-room.jpg",
-    price: "₹69",
+    price: "₹70",
     maxTeamSize: 3,
   },
 
@@ -111,7 +111,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Debate", "Technology", "Communication"],
     image: "/images/try-if-you-can.jpg",
-    price: "₹69",
+    price: "₹70",
   },
 
   // Non-Technical Events
@@ -129,7 +129,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Chess", "Strategy", "Competition"],
     image: "/images/photography.jpg",
-    price: "₹47",
+    price: "₹50",
   },
 
   {
@@ -146,7 +146,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Meme", "Creativity", "Humor"],
     image: "/images/channel-surfing.jpg",
-    price: "₹47",
+    price: "₹50",
   },
 
   {
@@ -163,12 +163,12 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Music", "Lyrics", "Team Event"],
     image: "/images/spin-a-yarn.jpg",
-    price: "₹47",
+    price: "₹50",
     maxTeamSize: 4,
   },
 
   {
-    id:10,
+    id: 10,
     title: "Murder Mystery",
     type: "non-tech" as const,
     date: "2026-03-21",
@@ -181,7 +181,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Mystery", "Investigation", "Teamwork"],
     image: "/images/channel-surfing.jpg",
-    price: "₹47",
+    price: "₹50",
     maxTeamSize: 4,
   },
 
@@ -199,7 +199,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Wikipedia", "Navigation", "Strategy"],
     image: "/images/photography.jpg",
-    price: "₹47",
+    price: "₹50",
     maxTeamSize: 2,
   },
 
@@ -217,13 +217,10 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Marketing", "Creativity", "Performance"],
     image: "/images/channel-surfing.jpg",
-    price: "₹47",
+    price: "₹50",
     maxTeamSize: 4,
   },
- 
 ];
-
-    
 
 // Helper functions
 export const getTechEvents = (): Event[] =>
