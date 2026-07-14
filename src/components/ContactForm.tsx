@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { Mail, Send, CheckCircle, User, MessageSquare, Tag } from "lucide-react";
 
 export default function ContactForm() {
@@ -57,18 +55,23 @@ export default function ContactForm() {
 
     setIsSubmitting(true);
     try {
-      if (!db) {
-        console.warn("Firebase is not configured. Mocking contact message submission.");
-      } else {
-        // Add document to contact_messages collection in Firestore
-        await addDoc(collection(db, "contact_messages"), {
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      const response = await fetch(`${apiBaseUrl}/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           name: formData.name.trim(),
           email: formData.email.toLowerCase().trim(),
           subject: formData.subject.trim(),
           message: formData.message.trim(),
-          createdAt: Timestamp.now(),
-          status: "unread",
-        });
+        }),
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.message || "Failed to send message via API");
       }
 
       toast.success("Your message has been sent successfully!");
