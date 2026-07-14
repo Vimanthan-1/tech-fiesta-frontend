@@ -39,8 +39,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
       }`}
       spotlightColor="rgba(220, 38, 38, 0.4)"
     >
-      {/* Event Type Badge */}
-      <div className="flex justify-start items-start mb-4">
+      {/* Event Type Badge and Price */}
+      <div className="flex justify-between items-start mb-4">
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
             event.type === "tech"
@@ -50,6 +50,9 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
         >
           {event.type === "tech" ? "Tech Event" : "Non-Tech Event"}
         </span>
+        {event.price && (
+          <span className="text-lg font-bold text-white">{event.price}</span>
+        )}
       </div>
       {/* Event Title */}
       <h3 className="text-xl font-bold text-white mb-3 line-clamp-2">

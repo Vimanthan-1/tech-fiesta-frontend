@@ -85,6 +85,86 @@ export default function RegistrationForm({
   const techEvents = events.filter(event => event.type === "tech");
   const nonTechEvents = events.filter(event => event.type === "non-tech");
 
+  const calculateTotalPrice = () => {
+    let total = 0;
+    const hasPass = formData.selectedPass !== null && formData.selectedPass !== undefined;
+    
+    if (!hasPass) {
+      // Tech events
+      formData.selectedEvents.forEach((se) => {
+        const event = events.find((e) => e.id === se.id);
+        if (event && event.price) {
+          total += parseInt(event.price.replace("₹", ""));
+        } else {
+          total += 70;
+        }
+      });
+      
+      // Workshops
+      formData.selectedWorkshops.forEach((sw) => {
+        const workshop = workshops.find((w) => w.id === sw.id);
+        if (workshop && workshop.price) {
+          total += parseInt(workshop.price.replace("₹", ""));
+        } else {
+          total += 101;
+        }
+      });
+      
+      // Non-tech events
+      formData.selectedNonTechEvents.forEach((se) => {
+        const event = events.find((e) => e.id === se.id);
+        if (event && event.price) {
+          total += parseInt(event.price.replace("₹", ""));
+        } else {
+          total += 50;
+        }
+      });
+    } else {
+      // Pass selected
+      const prices: number[] = [];
+      
+      formData.selectedEvents.forEach((se) => {
+        const event = events.find((e) => e.id === se.id);
+        if (event && event.price) {
+          prices.push(parseInt(event.price.replace("₹", "")));
+        } else {
+          prices.push(70);
+        }
+      });
+      
+      formData.selectedWorkshops.forEach((sw) => {
+        const workshop = workshops.find((w) => w.id === sw.id);
+        if (workshop && workshop.price) {
+          prices.push(parseInt(workshop.price.replace("₹", "")));
+        } else {
+          prices.push(101);
+        }
+      });
+      
+      formData.selectedNonTechEvents.forEach((se) => {
+        const event = events.find((e) => e.id === se.id);
+        if (event && event.price) {
+          prices.push(parseInt(event.price.replace("₹", "")));
+        } else {
+          prices.push(50);
+        }
+      });
+      
+      prices.sort((a, b) => b - a);
+      
+      total = 149;
+      
+      if (prices.length > 3) {
+        const extraPrices = prices.slice(3);
+        total += extraPrices.reduce((sum, p) => sum + p, 0);
+      }
+    }
+    
+    return total;
+  };
+
+  const totalPrice = calculateTotalPrice();
+
   // Check if any selected events require teams and get the maximum team size allowed
   const getTeamRequirements = () => {
     const selectedEventsWithTeamLimits = formData.selectedEvents
@@ -885,6 +965,33 @@ export default function RegistrationForm({
                   </div>
                 )}
               </div>
+
+              {/* Cost breakdown & Total */}
+              <div className="mt-6 pt-6 border-t border-red-500/25">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div className="text-gray-300 text-sm font-mono">
+                    {formData.selectedPass ? (
+                      <div>
+                        <span className="text-red-400 font-bold">Tech Fiesta Combo Pass Applied (₹149)</span>
+                        <span className="text-gray-400 block text-xs mt-1">
+                          Covers up to 3 of your selected events/workshops.
+                          {((formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length) > 3) && (
+                            <span className="text-amber-400"> (Extra items charged at standard rates)</span>
+                          )}
+                        </span>
+                      </div>
+                    ) : (
+                      <p>Individual ticket pricing applied</p>
+                    )}
+                  </div>
+                  <div className="text-right flex items-center gap-4">
+                    <span className="text-gray-400 text-sm font-mono">TOTAL ESTIMATED COST:</span>
+                    <span className="text-3xl font-bold text-white font-[family-name:var(--font-bebas-neue)] tracking-wider">
+                      ₹{totalPrice}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -1052,7 +1159,7 @@ export default function RegistrationForm({
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  Submit Registration
+                  Submit Registration {totalPrice > 0 ? `(₹${totalPrice})` : ''}
                 </>
               )}
             </button>
