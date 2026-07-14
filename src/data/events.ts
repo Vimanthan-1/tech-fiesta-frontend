@@ -17,7 +17,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Presentation", "Research", "Innovation"],
     image: "/images/project-presentation.jpg",
-    price: "₹70",
+    price: "₹1",
   },
 
   {
