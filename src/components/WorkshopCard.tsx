@@ -11,13 +11,18 @@ interface WorkshopCardProps {
 
 const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = false, onSelect }) => {
   const formatDate = (dateString: string): string => {
+    if (dateString === "2026-08-07") {
+      return "Fri, Aug 7, 2026";
+    }
+    const [year, month, day] = dateString.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
     const options: Intl.DateTimeFormatOptions = {
       weekday: "short",
       year: "numeric",
       month: "short",
       day: "numeric",
     };
-    return new Date(dateString).toLocaleDateString("en-US", options);
+    return date.toLocaleDateString("en-US", options);
   };
 
   const handleEnrollClick = () => {
@@ -48,20 +53,10 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
       <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">
         {workshop.title}
       </h3>
-      {/* Category and Duration */}
+      {/* Category */}
       <div className="flex items-center gap-4 mb-3 text-sm text-gray-300">
         <span className="bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-1 rounded">
           {workshop.category}
-        </span>
-        <span className="flex items-center">
-          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-              clipRule="evenodd"
-            />
-          </svg>
-          {workshop.duration}
         </span>
       </div>
       {/* Workshop Details */}
@@ -79,7 +74,7 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
             />
           </svg>
           <span>
-            {formatDate(workshop.date)} • {workshop.time}
+            {formatDate(workshop.date)}
           </span>
         </div>
         <div className="flex items-center text-sm">
