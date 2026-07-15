@@ -17,7 +17,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Presentation", "Research", "Innovation"],
     image: "/images/project-presentation.jpg",
-    price: "₹1",
+    price: "₹70",
     maxTeamSize: 2,
   },
 
@@ -35,7 +35,7 @@ export const events: Event[] = [
     registrations: 0,
     tags: ["Quiz", "Coding", "Debugging", "Logic"],
     image: "/images/prompt-engineering.jpg",
-    price: "₹1",
+    price: "₹70",
     maxTeamSize: 3,
   },
    {
@@ -59,7 +59,7 @@ export const events: Event[] = [
     "Product Thinking"
   ],
   image: "/images/ui-challenge.jpg",
-  price: "₹1",
+  price: "₹70",
   maxTeamSize: 3,
 },
 
