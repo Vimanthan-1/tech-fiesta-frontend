@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { Event, RegistrationFormData, TeamMember, PaymentQR, SelectedItem } from "@/types";
 import { events } from "@/data/events";
@@ -341,6 +340,12 @@ export default function RegistrationForm({
     else if (!validatePhone(formData.whatsapp)) newErrors.whatsapp = "Invalid phone number format";
     if (!formData.college.trim()) newErrors.college = "College name is required";
     if (!formData.year) newErrors.year = "Year of study is required";
+    
+    // Event selection validation - at least one event or workshop must be selected
+    const totalSelections = formData.selectedEvents.length + formData.selectedWorkshops.length + formData.selectedNonTechEvents.length;
+    if (totalSelections === 0) {
+      newErrors.events = "Please select at least one event or workshop to register";
+    }
       
     // Team member validation
     if (formData.isTeamEvent && formData.teamMembers) {
