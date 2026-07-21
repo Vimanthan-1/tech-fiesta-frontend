@@ -270,7 +270,7 @@ export const events: Event[] = [
     image: "/images/channel-surfing.jpg",
     price: "₹50",
     maxTeamSize: 4,
-    minTeamSize: 4,
+    minTeamSize: 1,
     rulebookPath: "/rules/events/12.md",
     coordinators: [
       { name: "Coordinator 1", phone: "+91 8072 246 835" },
