@@ -8,7 +8,7 @@ import { Event, Workshop, SelectedItem } from "@/types";
 import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { FaWhatsapp, FaInstagram, FaLinkedin } from "react-icons/fa";
+import { FaInstagram, FaLinkedin } from "react-icons/fa";
 
 // ─── Statically loaded (tiny, needed immediately) ────────────────────────────
 import LoadingScreen from "@/components/LoadingScreen";
@@ -797,9 +797,6 @@ export default function Home() {
                                 </a>
                                 <a href="https://www.linkedin.com/company/club-asymmetric/" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-gray-300 transition-all duration-300">
                                   <FaLinkedin className="w-4 h-4" />
-                                </a>
-                                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="p-2.5 bg-white/5 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-gray-300 transition-all duration-300">
-                                  <FaWhatsapp className="w-4 h-4" />
                                 </a>
                               </div>
                             </div>

@@ -41,6 +41,7 @@ export const events: Event[] = [
     image: "/images/prompt-engineering.jpg",
     price: "₹70",
     maxTeamSize: 1,
+    rulebookPath: "/rules/events/2.md",
     coordinators: [
       { name: "Coordinator", phone: "+91 94883 63352" }
     ],
@@ -69,6 +70,7 @@ export const events: Event[] = [
   price: "₹70",
   maxTeamSize: 3,
   minTeamSize: 2,
+  rulebookPath: "/rules/events/3.md",
   coordinators: [
     { name: "Coordinator", phone: "+91 99408 19044" }
   ],
