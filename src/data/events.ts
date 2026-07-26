@@ -13,8 +13,8 @@ export const events: Event[] = [
     description:
       "Participants present innovative technical ideas, research work, or project concepts before a panel of judges. Evaluation is based on originality, technical depth, presentation skills, and clarity of explanation.",
     speakers: ["Faculty Panel"],
-    capacity: 60,
-    registrations: 0,
+    capacity: 50,
+    registrations: 35,
     tags: ["Presentation", "Research", "Innovation"],
     image: "/images/project-presentation.jpg",
     price: "₹70",
@@ -56,8 +56,8 @@ export const events: Event[] = [
   description:
     "UI Challenge is a fast-paced design sprint where participants create a user-friendly and visually appealing interface based on a given problem statement. Using tools such as Figma, teams must design key screens, user flows, and a functional prototype within a limited time. Example challenge: Design a Smart Parking Application for a Smart City.",
   speakers: ["Design Mentors"],
-  capacity: 60,
-  registrations: 0,
+  capacity: 50,
+  registrations: 32,
   tags: [
     "UI/UX",
     "Figma",

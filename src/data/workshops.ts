@@ -65,7 +65,7 @@ export const workshops: Workshop[] = [
       "Workshop Manual",
     ],
     capacity: 93,
-    registrations: 0,
+    registrations: 64,
     price: "₹101",
     tags: [
       "Raspberry Pi",

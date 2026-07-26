@@ -165,16 +165,25 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
           ) : (
             <div />
           )}
-          <button 
-            onClick={handleRegisterClick}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
-              isSelected 
-                ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
-                : "bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
-            }`}
-          >
-            {isSelected ? "✓ Selected" : "Register Now"}
-          </button>
+          {(event.registrations ?? 0) >= (event.capacity ?? Infinity) ? (
+            <button 
+              disabled
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md flex items-center gap-1 cursor-not-allowed bg-gray-700 text-gray-300 opacity-70"
+            >
+              Sold Out
+            </button>
+          ) : (
+            <button 
+              onClick={handleRegisterClick}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
+                isSelected 
+                  ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
+                  : "bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
+              }`}
+            >
+              {isSelected ? "✓ Selected" : "Register Now"}
+            </button>
+          )}
         </div>
       </SpotlightCard>
 
