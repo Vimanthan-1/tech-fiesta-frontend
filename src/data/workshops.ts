@@ -20,7 +20,7 @@ export const workshops: Workshop[] = [
       "Interest in distributed systems",
     ],
     materials: ["Laptop", "Python Environment", "Workshop Resources"],
-    capacity: 100,
+    capacity: 80,
     registrations: 0,
     price: "₹101",
     tags: [
@@ -64,7 +64,7 @@ export const workshops: Workshop[] = [
       "OpenCV Setup",
       "Workshop Manual",
     ],
-    capacity: 93,
+    capacity: 80,
     registrations: 64,
     price: "₹101",
     tags: [
@@ -108,7 +108,7 @@ export const workshops: Workshop[] = [
       "Cloud Access",
       "Workshop Resources",
     ],
-    capacity: 100,
+    capacity: 80,
     registrations: 0,
     price: "₹101",
     tags: [
@@ -151,7 +151,7 @@ export const workshops: Workshop[] = [
       "Virtualization Environment",
       "Workshop Resources",
     ],
-    capacity: 100,
+    capacity: 80,
     registrations: 0,
     price: "₹101",
     tags: [
@@ -194,7 +194,7 @@ export const workshops: Workshop[] = [
       "Blockchain Test Network Access",
       "Workshop Resources",
     ],
-    capacity: 100,
+    capacity: 80,
     registrations: 0,
     price: "₹101",
     tags: [
