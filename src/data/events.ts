@@ -13,7 +13,7 @@ export const events: Event[] = [
     description:
       "Participants present innovative technical ideas, research work, or project concepts before a panel of judges. Evaluation is based on originality, technical depth, presentation skills, and clarity of explanation.",
     speakers: ["Faculty Panel"],
-    capacity: 60,
+    capacity: 51,
     tags: ["Presentation", "Research", "Innovation"],
     image: "/images/project-presentation.jpg",
     price: "₹70",
