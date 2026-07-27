@@ -3,14 +3,16 @@ import { Event } from "@/types";
 import { generateRegistrationUrl } from "@/utils/registration";
 import SpotlightCard from "./ReactBits/SpotlightCard/SpotlightCard";
 import EventFaqModal from "./EventFaqModal";
+import toast from "react-hot-toast";
 
 interface EventCardProps {
   event: Event;
   isSelected?: boolean;
   onSelect?: (event: Event) => void;
+  currentRegistrations?: number;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSelect }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSelect, currentRegistrations = 0 }) => {
   const formatDate = (dateString: string): string => {
     if (dateString === "2026-08-07") {
       return "Fri, Aug 7, 2026";
@@ -27,6 +29,10 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
   };
 
   const handleRegisterClick = () => {
+    if ((currentRegistrations ?? 0) >= (event.capacity ?? Infinity)) {
+      toast.error("This event has been filled. Please try booking for other events.");
+      return;
+    }
     if (onSelect) {
       onSelect(event);
     } else {
@@ -52,15 +58,17 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
       >
         {/* Event Type Badge and Price */}
         <div className="flex justify-between items-start mb-4">
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
-              event.type === "tech"
-                ? "bg-red-500/20 text-red-300 border border-red-500/30"
-                : "bg-red-500/20 text-red-300 border border-red-500/30"
-            }`}
-          >
-            {event.type === "tech" ? "Tech Event" : "Non-Tech Event"}
-          </span>
+          <div className="flex flex-wrap gap-2">
+            <span
+              className={`px-3 py-1 rounded-full text-xs font-medium ${
+                event.type === "tech"
+                  ? "bg-red-500/20 text-red-300 border border-red-500/30"
+                  : "bg-red-500/20 text-red-300 border border-red-500/30"
+              }`}
+            >
+              {event.type === "tech" ? "Tech Event" : "Non-Tech Event"}
+            </span>
+          </div>
           {event.price && (
             <span className="text-lg font-bold text-white">{event.price}</span>
           )}
@@ -165,25 +173,18 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
           ) : (
             <div />
           )}
-          {(event.registrations ?? 0) >= (event.capacity ?? Infinity) ? (
-            <button 
-              disabled
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md flex items-center gap-1 cursor-not-allowed bg-gray-700 text-gray-300 opacity-70"
-            >
-              Sold Out
-            </button>
-          ) : (
-            <button 
-              onClick={handleRegisterClick}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
-                isSelected 
+          <button 
+            onClick={handleRegisterClick}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
+              (currentRegistrations ?? 0) >= (event.capacity ?? Infinity)
+                ? "bg-gray-700 text-gray-300 opacity-80 cursor-not-allowed hover:scale-100"
+                : isSelected 
                   ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
                   : "bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
-              }`}
-            >
-              {isSelected ? "✓ Selected" : "Register Now"}
-            </button>
-          )}
+            }`}
+          >
+            {isSelected ? "✓ Selected" : "Register Now"}
+          </button>
         </div>
       </SpotlightCard>
 

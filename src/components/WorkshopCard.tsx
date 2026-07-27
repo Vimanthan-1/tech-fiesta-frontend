@@ -3,14 +3,16 @@ import { Workshop } from "@/types";
 import { generateRegistrationUrl } from "@/utils/registration";
 import SpotlightCard from "./ReactBits/SpotlightCard/SpotlightCard";
 import EventFaqModal from "./EventFaqModal";
+import toast from "react-hot-toast";
 
 interface WorkshopCardProps {
   workshop: Workshop;
   isSelected?: boolean;
   onSelect?: (workshop: Workshop) => void;
+  currentRegistrations?: number;
 }
 
-const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = false, onSelect }) => {
+const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = false, onSelect, currentRegistrations = 0 }) => {
   const formatDate = (dateString: string): string => {
     if (dateString === "2026-08-07") {
       return "Fri, Aug 7, 2026";
@@ -27,6 +29,10 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
   };
 
   const handleEnrollClick = () => {
+    if ((currentRegistrations ?? 0) >= (workshop.capacity ?? Infinity)) {
+      toast.error("This workshop has been filled. Please try enrolling in other workshops.");
+      return;
+    }
     if (onSelect) {
       onSelect(workshop);
     } else {
@@ -50,7 +56,8 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
         spotlightColor="rgba(220, 38, 38, 0.4)"
       >
         {/* Header with Price */}
-        <div className="flex justify-end items-start mb-4">
+        <div className="flex justify-between items-start mb-4">
+          <div />
           <div className="text-right">
             <span className="text-lg font-bold text-white">{workshop.price}</span>
           </div>
@@ -182,25 +189,18 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
             ) : (
               <div />
             )}
-            {(workshop.registrations ?? 0) >= (workshop.capacity ?? Infinity) ? (
-              <button 
-                disabled
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md flex items-center gap-1 cursor-not-allowed bg-gray-700 text-gray-300 opacity-70"
-              >
-                Sold Out
-              </button>
-            ) : (
-              <button 
-                onClick={handleEnrollClick}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
-                  isSelected 
+            <button 
+              onClick={handleEnrollClick}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
+                (currentRegistrations ?? 0) >= (workshop.capacity ?? Infinity)
+                  ? "bg-gray-700 text-gray-300 opacity-80 cursor-not-allowed hover:scale-100"
+                  : isSelected 
                     ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
                     : "bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
-                }`}
-              >
-                {isSelected ? "✓ Selected" : "Enroll Now"}
-              </button>
-            )}
+              }`}
+            >
+              {isSelected ? "✓ Selected" : "Enroll Now"}
+            </button>
           </div>
         </div>
       </SpotlightCard>

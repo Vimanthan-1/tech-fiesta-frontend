@@ -21,7 +21,6 @@ export const workshops: Workshop[] = [
     ],
     materials: ["Laptop", "Python Environment", "Workshop Resources"],
     capacity: 80,
-    registrations: 0,
     price: "₹101",
     tags: [
       "Multi-Agent AI",
@@ -65,7 +64,6 @@ export const workshops: Workshop[] = [
       "Workshop Manual",
     ],
     capacity: 80,
-    registrations: 64,
     price: "₹101",
     tags: [
       "Raspberry Pi",
@@ -109,7 +107,6 @@ export const workshops: Workshop[] = [
       "Workshop Resources",
     ],
     capacity: 80,
-    registrations: 0,
     price: "₹101",
     tags: [
       "MLOps",
@@ -152,7 +149,6 @@ export const workshops: Workshop[] = [
       "Workshop Resources",
     ],
     capacity: 80,
-    registrations: 0,
     price: "₹101",
     tags: [
       "OpenStack",
@@ -195,7 +191,6 @@ export const workshops: Workshop[] = [
       "Workshop Resources",
     ],
     capacity: 80,
-    registrations: 0,
     price: "₹101",
     tags: [
       "Blockchain",

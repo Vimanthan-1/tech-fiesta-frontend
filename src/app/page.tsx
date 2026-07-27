@@ -115,6 +115,30 @@ export default function Home() {
   const selectedWorkshopsRef = useRef<SelectedItem[]>([]);
   const selectedNonTechEventsRef = useRef<SelectedItem[]>([]);
 
+  const [registrationStats, setRegistrationStats] = useState<{
+    events: Record<number, number>;
+    workshops: Record<number, number>;
+    nonTechEvents: Record<number, number>;
+  } | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+        const res = await fetch(`${apiBaseUrl}/stats/registrations`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.success) {
+            setRegistrationStats(json.data);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch registration stats", err);
+      }
+    };
+    fetchStats();
+  }, []);
+
   useEffect(() => {
     selectedEventsRef.current = selectedEvents;
   }, [selectedEvents]);
@@ -701,6 +725,7 @@ export default function Home() {
                           selectedNonTechEvents={selectedNonTechEvents}
                           onSelectEvent={handleSelectEvent}
                           onSelectNonTechEvent={handleSelectNonTechEvent}
+                          registrationStats={registrationStats}
                         />
                       </div>
                     </motion.div>
@@ -730,6 +755,7 @@ export default function Home() {
                           showFilter={true}
                           selectedWorkshops={selectedWorkshops}
                           onSelectWorkshop={handleSelectWorkshop}
+                          registrationStats={registrationStats?.workshops}
                         />
                       </div>
                     </motion.div>

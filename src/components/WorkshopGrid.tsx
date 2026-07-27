@@ -8,6 +8,7 @@ interface WorkshopGridProps {
   showFilter?: boolean;
   selectedWorkshops?: SelectedItem[];
   onSelectWorkshop?: (workshop: Workshop) => void;
+  registrationStats?: Record<number, number>;
 }
 
 const WorkshopGrid: React.FC<WorkshopGridProps> = ({
@@ -16,6 +17,7 @@ const WorkshopGrid: React.FC<WorkshopGridProps> = ({
   showFilter = false,
   selectedWorkshops = [],
   onSelectWorkshop,
+  registrationStats,
 }) => {
   const [filter, setFilter] = React.useState<string>("all");
 
@@ -83,6 +85,7 @@ const WorkshopGrid: React.FC<WorkshopGridProps> = ({
             <WorkshopCard 
               key={workshop.id} 
               workshop={workshop} 
+              currentRegistrations={registrationStats ? registrationStats[workshop.id] : 0}
               isSelected={selectedWorkshops.some((w) => w.id === workshop.id)}
               onSelect={onSelectWorkshop}
             />

@@ -10,6 +10,7 @@ interface EventGridProps {
   selectedNonTechEvents?: SelectedItem[];
   onSelectEvent?: (event: Event) => void;
   onSelectNonTechEvent?: (event: Event) => void;
+  registrationStats?: { events: Record<number, number>; nonTechEvents: Record<number, number> };
 }
 
 const EventGrid: React.FC<EventGridProps> = ({
@@ -20,6 +21,7 @@ const EventGrid: React.FC<EventGridProps> = ({
   selectedNonTechEvents = [],
   onSelectEvent,
   onSelectNonTechEvent,
+  registrationStats,
 }) => {
   const [filter, setFilter] = React.useState<"all" | "tech" | "non-tech">(
     "all"
@@ -88,6 +90,11 @@ const EventGrid: React.FC<EventGridProps> = ({
             <EventCard 
               key={event.id} 
               event={event} 
+              currentRegistrations={
+                registrationStats 
+                  ? (event.type === "tech" ? registrationStats.events[event.id] : registrationStats.nonTechEvents[event.id]) 
+                  : 0
+              }
               isSelected={
                 event.type === "tech"
                   ? selectedEvents.some((e) => e.id === event.id)
