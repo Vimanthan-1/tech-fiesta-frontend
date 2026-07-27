@@ -796,8 +796,8 @@ export default function Home() {
                                 <Phone className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
                                 <div>
                                   <h4 className="text-[10px] text-gray-500 font-mono uppercase tracking-wider">Helpline</h4>
-                                  <a href="tel:+918667846929" className="text-white hover:text-red-400 text-sm font-semibold">
-                                    +91 86678 46929
+                                  <a href="tel:+918903071754" className="text-white hover:text-red-400 text-sm font-semibold">
+                                    +91 89030 71754
                                   </a>
                                 </div>
                               </div>
