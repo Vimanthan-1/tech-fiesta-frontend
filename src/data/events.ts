@@ -13,7 +13,7 @@ export const events: Event[] = [
     description:
       "Participants present innovative technical ideas, research work, or project concepts before a panel of judges. Evaluation is based on originality, technical depth, presentation skills, and clarity of explanation.",
     speakers: ["Faculty Panel"],
-    capacity: 50,
+    capacity: 60,
     tags: ["Presentation", "Research", "Innovation"],
     image: "/images/project-presentation.jpg",
     price: "₹70",
@@ -34,7 +34,7 @@ export const events: Event[] = [
     description:
       "A multi-round competition featuring technical quizzes, logical reasoning, debugging tasks, coding rounds, and surprise challenges. Participants are eliminated round by round until only one survivor remains.",
     speakers: ["Technical Mentors"],
-    capacity: 50,
+    capacity: 100,
     tags: ["Quiz", "Coding", "Debugging", "Logic"],
     image: "/images/prompt-engineering.jpg",
     price: "₹70",
@@ -83,7 +83,7 @@ export const events: Event[] = [
     description:
       "A common coding challenge open to all skill levels. Participants solve a curated set of programming problems covering fundamental data structures, algorithms, and logic. Race against time and peers to achieve the highest score and claim the top spot on the leaderboard.",
     speakers: ["Programming Mentors"],
-    capacity: 50,
+    capacity: 100,
     tags: ["Coding", "Algorithms", "Data Structures", "Competition"],
     image: "/images/reverse-code.jpg",
     price: "₹70",
@@ -125,7 +125,7 @@ export const events: Event[] = [
     description:
       "Participants debate trending technology topics such as AI, cybersecurity, startups, coding culture, social media, and future technologies. The event focuses on critical thinking, communication, and technical awareness.",
     speakers: ["Moderators"],
-    capacity: 50,
+    capacity: 100,
     tags: ["Debate", "Technology", "Communication"],
     image: "/images/try-if-you-can.jpg",
     price: "₹70",
@@ -146,7 +146,7 @@ export const events: Event[] = [
     description:
       "Individual chess competition featuring an online qualifier round followed by an offline final round using a physical chess board.",
     speakers: ["Event Coordinators"],
-    capacity: 60,
+    capacity: 100,
     tags: ["Chess", "Strategy", "Competition"],
     image: "/images/photography.jpg",
     price: "₹50",
@@ -167,7 +167,7 @@ export const events: Event[] = [
     description:
       "Create the funniest and most creative meme based on the events happening during Tech Fiesta. Originality and relevance matter the most.",
     speakers: ["Judges Panel"],
-    capacity: 50,
+    capacity: 100,
     tags: ["Meme", "Creativity", "Humor"],
     image: "/images/channel-surfing.jpg",
     price: "₹50",

@@ -7,7 +7,7 @@ import { events } from "@/data/events";
 import { workshops } from "@/data/workshops";
 import { validateEmail, validatePhone } from "@/utils/registration"
 
-import { CheckCircle, MapPin, Plus  } from "lucide-react";
+import { CheckCircle, MapPin, Plus, AlertCircle } from "lucide-react";
 import { submitRegistration, checkDuplicateRegistration, createPaymentOrder, verifyPayment } from "@/services/registrationService";
 
 const loadRazorpayScript = () => {
@@ -996,14 +996,10 @@ export default function RegistrationForm({
 
           {/* ================= SPECIAL PASS ================= */}
 
-<div className="mt-8 rounded-2xl overflow-hidden border border-red-500/25 bg-gradient-to-br from-[#180606] via-[#0d0505] to-black shadow-[0_0_30px_rgba(220,38,38,0.18)]">
+<div className="mt-8 rounded-2xl overflow-hidden border border-zinc-800 bg-gradient-to-br from-[#121214] via-[#0d0d0e] to-black shadow-none opacity-50 grayscale select-none pointer-events-none">
 
-  {/* Animated Shine */}
+  {/* No animated shine since pass is stopped */}
   <div className="relative overflow-hidden">
-
-    <div className="absolute inset-0">
-      <div className="absolute -left-40 top-0 h-full w-32 rotate-12 bg-gradient-to-r from-transparent via-red-400/20 to-transparent animate-[shine_5s_linear_infinite]" />
-    </div>
 
     <div className="relative p-5">
 
@@ -1012,45 +1008,45 @@ export default function RegistrationForm({
         {/* Left */}
         <div>
 
-          <p className="text-[11px] uppercase tracking-[4px] text-red-400 font-mono">
+          <p className="text-[11px] uppercase tracking-[4px] text-zinc-500 font-mono">
             SPECIAL PASS
           </p>
 
-          <h3 className="mt-1 text-2xl font-bold text-white">
+          <h3 className="mt-1 text-2xl font-bold text-zinc-400">
             Tech Fiesta Pass
           </h3>
 
-          <p className="mt-2 text-sm text-gray-400 max-w-sm">
-            Includes <span className="text-red-400 font-semibold">any 3 registrations</span>
+          <p className="mt-2 text-sm text-zinc-500 max-w-sm">
+            Includes <span className="text-zinc-400 font-semibold">any 3 registrations</span>
             <br />
             (Events, Workshops or a Mix of both)
           </p>
 
         </div>
 
-        {/* Premium Vertical Barcode */}
-<div className="hidden md:flex items-center rounded-lg border border-red-500/20 bg-black/30 px-3 py-3 backdrop-blur-sm">
+        {/* Premium Vertical Barcode (Greyed out) */}
+        <div className="hidden md:flex items-center rounded-lg border border-zinc-800 bg-black/30 px-3 py-3 backdrop-blur-sm">
 
-  <div className="flex gap-[2px]">
+          <div className="flex gap-[2px]">
 
-    {[2,4,2,3,5,2,4,2,3,2,5,2,4,3,2,5].map((w, i) => (
-      <div
-        key={i}
-        style={{ width: `${w}px` }}
-        className="h-[92px] rounded-full bg-gradient-to-b from-red-100 via-red-400 to-red-700"
-      />
-    ))}
+            {[2,4,2,3,5,2,4,2,3,2,5,2,4,3,2,5].map((w, i) => (
+              <div
+                key={i}
+                style={{ width: `${w}px` }}
+                className="h-[92px] rounded-full bg-gradient-to-b from-zinc-600 via-zinc-700 to-zinc-800"
+              />
+            ))}
 
-  </div>
+          </div>
 
-  <div className="ml-3 flex flex-col items-center">
-    <span className="text-[9px] tracking-[2px] text-red-400 [writing-mode:vertical-rl] rotate-180 font-mono">
-      TECHFIESTA2026
-    </span>
-  </div>
+          <div className="ml-3 flex flex-col items-center">
+            <span className="text-[9px] tracking-[2px] text-zinc-500 [writing-mode:vertical-rl] rotate-180 font-mono">
+              TECHFIESTA2026
+            </span>
+          </div>
 
-</div>
-</div>
+        </div>
+      </div>
 
       {/* Bottom */}
 
@@ -1058,45 +1054,20 @@ export default function RegistrationForm({
 
         <div>
 
-          <p className="text-3xl font-bold text-red-400">
+          <p className="text-3xl font-bold text-zinc-500 line-through">
             ₹149
           </p>
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-zinc-600">
             One Pass • Three Registrations
           </p>
 
         </div>
 
-        {!techFiestaPass ? (
-
-          <button
-            type="button"
-            onClick={() => {
-              setTechFiestaPass(true);
-              handleInputChange("selectedPass", 1);
-            }}
-            className="flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 font-semibold text-white transition hover:bg-red-700 hover:scale-105"
-          >
-            <Plus className="h-4 w-4" />
-            Add Pass
-          </button>
-
-        ) : (
-
-          <button
-            type="button"
-            onClick={() => {
-              setTechFiestaPass(false);
-              handleInputChange("selectedPass", null);
-            }}
-            className="flex items-center gap-2 rounded-lg border border-green-500 bg-green-500/15 px-5 py-2.5 font-semibold text-green-400 transition hover:bg-green-500/20"
-          >
-            <CheckCircle className="h-4 w-4" />
-            Pass Added
-          </button>
-
-        )}
+        <div className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/40 px-4 py-2 font-mono text-xs font-semibold text-zinc-400">
+          <AlertCircle className="h-4 w-4 text-zinc-500" />
+          Pass System Stopped
+        </div>
 
       </div>
 
