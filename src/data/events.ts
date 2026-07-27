@@ -34,7 +34,7 @@ export const events: Event[] = [
     description:
       "A multi-round competition featuring technical quizzes, logical reasoning, debugging tasks, coding rounds, and surprise challenges. Participants are eliminated round by round until only one survivor remains.",
     speakers: ["Technical Mentors"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Quiz", "Coding", "Debugging", "Logic"],
     image: "/images/prompt-engineering.jpg",
     price: "₹70",
@@ -83,7 +83,7 @@ export const events: Event[] = [
     description:
       "A common coding challenge open to all skill levels. Participants solve a curated set of programming problems covering fundamental data structures, algorithms, and logic. Race against time and peers to achieve the highest score and claim the top spot on the leaderboard.",
     speakers: ["Programming Mentors"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Coding", "Algorithms", "Data Structures", "Competition"],
     image: "/images/reverse-code.jpg",
     price: "₹70",
@@ -104,7 +104,7 @@ export const events: Event[] = [
     description:
       "An AR and QR based cyber treasure hunt where participants solve coding puzzles, encrypted clues, cybersecurity challenges, hidden website tasks, and AR missions across the campus.",
     speakers: ["Event Coordinators"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Cybersecurity", "AR", "QR", "Treasure Hunt"],
     image: "/images/escape-room.jpg",
     price: "₹70",
@@ -125,7 +125,7 @@ export const events: Event[] = [
     description:
       "Participants debate trending technology topics such as AI, cybersecurity, startups, coding culture, social media, and future technologies. The event focuses on critical thinking, communication, and technical awareness.",
     speakers: ["Moderators"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Debate", "Technology", "Communication"],
     image: "/images/try-if-you-can.jpg",
     price: "₹70",
@@ -167,7 +167,7 @@ export const events: Event[] = [
     description:
       "Create the funniest and most creative meme based on the events happening during Tech Fiesta. Originality and relevance matter the most.",
     speakers: ["Judges Panel"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Meme", "Creativity", "Humor"],
     image: "/images/channel-surfing.jpg",
     price: "₹50",
@@ -188,7 +188,7 @@ export const events: Event[] = [
     description:
       "Teams identify missing lyrics and recognize songs from background music tracks in a fun musical challenge.",
     speakers: ["Music Coordinators"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Music", "Lyrics", "Team Event"],
     image: "/images/spin-a-yarn.jpg",
     price: "₹50",
@@ -210,7 +210,7 @@ export const events: Event[] = [
     description:
       "Teams investigate clues, analyze suspects, and solve a fictional crime scene before time runs out.",
     speakers: ["Event Coordinators"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Mystery", "Investigation", "Teamwork"],
     image: "/images/channel-surfing.jpg",
     price: "₹50",
@@ -233,7 +233,7 @@ export const events: Event[] = [
     description:
       "Teams race from one Wikipedia page to another using only internal Wikipedia links. Fastest navigation with the fewest clicks wins.",
     speakers: ["Event Coordinators"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Wikipedia", "Navigation", "Strategy"],
     image: "/images/photography.jpg",
     price: "₹50",
@@ -255,7 +255,7 @@ export const events: Event[] = [
     description:
       "Teams promote and sell a quirky or imaginary product through a creative advertisement performance filled with humor and innovation.",
     speakers: ["Judges Panel"],
-    capacity: 60,
+    capacity: 50,
     tags: ["Marketing", "Creativity", "Performance"],
     image: "/images/channel-surfing.jpg",
     price: "₹50",
