@@ -29,7 +29,7 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
   };
 
   const handleEnrollClick = () => {
-    if ((currentRegistrations ?? 0) >= (workshop.capacity ?? Infinity)) {
+    if (false) {
       toast.error("This workshop has been filled. Please try enrolling in other workshops.");
       return;
     }
@@ -192,7 +192,7 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
             <button 
               onClick={handleEnrollClick}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
-                (currentRegistrations ?? 0) >= (workshop.capacity ?? Infinity)
+                false
                   ? "bg-gray-700 text-gray-300 opacity-80 cursor-not-allowed hover:scale-100"
                   : isSelected 
                     ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
