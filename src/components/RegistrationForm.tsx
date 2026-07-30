@@ -73,7 +73,34 @@ export default function RegistrationForm({
     formData: RegistrationFormData;
     submissionDate: string;
   } | null>(null);
-   const [techFiestaPass, setTechFiestaPass] = useState(false);
+  const [techFiestaPass, setTechFiestaPass] = useState(false);
+  const [isProcessingSuccess, setIsProcessingSuccess] = useState(false);
+  const [processingProgress, setProcessingProgress] = useState(0);
+
+  useEffect(() => {
+    if (isProcessingSuccess) {
+      // 12 second timer for the animation
+      const duration = 12000;
+      const intervalTime = 100;
+      const increment = 100 / (duration / intervalTime);
+      
+      const interval = setInterval(() => {
+        setProcessingProgress(p => Math.min(p + increment, 100));
+      }, intervalTime);
+
+      const timer = setTimeout(() => {
+        setIsProcessingSuccess(false);
+        clearInterval(interval);
+      }, duration);
+
+      return () => {
+        clearTimeout(timer);
+        clearInterval(interval);
+      };
+    } else {
+      setProcessingProgress(0);
+    }
+  }, [isProcessingSuccess]);
 
   // Payment QR data - Free entry, individual QRs for each event/workshop
   const generatePaymentQRs = (): PaymentQR[] => {
@@ -475,6 +502,8 @@ export default function RegistrationForm({
                     submissionDate: new Date().toLocaleString()
                   });
                   
+                  setIsProcessingSuccess(true);
+                  
                   toast.success(
                     `Payment verified & registered! Events: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
                     { duration: 8000 }
@@ -517,6 +546,8 @@ export default function RegistrationForm({
             formData: { ...formData },
             submissionDate: new Date().toLocaleString()
           });
+          
+          setIsProcessingSuccess(true);
           
           toast.success(
             `Successfully registered! Events registered: ${eventCount}. Confirmation email will be sent to: ${formData.email}.`,
@@ -592,6 +623,8 @@ export default function RegistrationForm({
     });
     setErrors({});
     setSuccessData(null);
+    setIsProcessingSuccess(false);
+    setProcessingProgress(0);
     setTechFiestaPass(false);
     onClearCart?.();
     toast.success("Form reset! You can now submit a new registration.", { duration: 3000 });
@@ -1136,8 +1169,36 @@ export default function RegistrationForm({
             </button>
           </div>
 
+          {/* Processing Animation */}
+          {successData && isProcessingSuccess && (
+            <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-8 sm:p-12 w-full overflow-hidden transition-all duration-300 flex flex-col items-center justify-center min-h-[350px]">
+              <div className="relative w-24 h-24 mb-8">
+                <div className="absolute inset-0 border-4 border-red-500/10 rounded-full"></div>
+                <div className="absolute inset-0 border-4 border-red-600 rounded-full border-t-transparent animate-spin"></div>
+                <div className="absolute inset-0 border-4 border-amber-500 rounded-full border-b-transparent animate-[spin_1.5s_linear_infinite_reverse] scale-75"></div>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-red-500 mb-3 font-[family-name:var(--font-bebas-neue)] tracking-wider text-center">
+                Processing Your Passes...
+              </h3>
+              <p className="text-gray-400 text-sm font-mono tracking-widest uppercase text-center mb-8">
+                // SECURING_ACCESS_PROTOCOLS
+              </p>
+              
+              <div className="w-full max-w-md bg-black/60 rounded-full h-2 overflow-hidden border border-red-500/20">
+                <div 
+                  className="bg-gradient-to-r from-red-600 via-amber-500 to-red-600 h-full transition-all duration-100 ease-linear shadow-[0_0_10px_rgba(220,38,38,0.5)]" 
+                  style={{ width: `${processingProgress}%` }}
+                ></div>
+              </div>
+              
+              <div className="mt-4 text-xs font-mono text-gray-500 text-center">
+                Generating unique QR codes and assigning team data... Please wait.
+              </div>
+            </div>
+          )}
+
           {/* Download Section - Show after successful registration */}
-          {successData && (
+          {successData && !isProcessingSuccess && (
             <div className="bg-black/85 border border-red-500/20 backdrop-blur-sm shadow-[0_1px_8px_rgba(220,38,38,0.07)] rounded-2xl p-4 sm:p-6 w-full overflow-hidden transition-all duration-300">
               <h3 className="text-xl sm:text-2xl font-bold text-red-500 mb-4 flex items-center font-[family-name:var(--font-bebas-neue)] tracking-wider">
                 <CheckCircle className="w-6 h-6 mr-3" />
