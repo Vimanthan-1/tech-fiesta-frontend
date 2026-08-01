@@ -28,9 +28,11 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
     return date.toLocaleDateString("en-US", options);
   };
 
+  const soldOutEventIds = [1, 9, 10]; // Paper Presentation, Missing Lyrics, Murder Mystery
+  const isSoldOutEvent = soldOutEventIds.includes(event.id);
+
   const handleRegisterClick = () => {
-    const isPaperPresentation = event.id === 1;
-    const capacity = isPaperPresentation ? (event.capacity ?? Infinity) : Infinity;
+    const capacity = isSoldOutEvent ? (event.capacity ?? Infinity) : Infinity;
     if ((currentRegistrations ?? 0) >= capacity) {
       toast.error("This event has been filled. Please try booking for other events.");
       return;
@@ -178,7 +180,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
           <button 
             onClick={handleRegisterClick}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform hover:scale-105 shadow-md flex items-center gap-1 cursor-pointer ${
-              (event.id === 1 && (currentRegistrations ?? 0) >= (event.capacity ?? Infinity))
+              (isSoldOutEvent && (currentRegistrations ?? 0) >= (event.capacity ?? Infinity))
                 ? "bg-gray-700 text-gray-300 opacity-80 cursor-not-allowed hover:scale-100"
                 : isSelected 
                   ? "bg-red-950/80 border border-red-500/50 text-white hover:bg-red-700 hover:border-red-500 shadow-[0_4px_12px_rgba(220,38,38,0.25)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]" 
