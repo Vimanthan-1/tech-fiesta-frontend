@@ -762,18 +762,26 @@ export default function RegistrationForm({
                 <span className="break-words">// TECHNICAL_EVENTS</span>
               </h4>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-                {techEvents.map(event => (
-                  <label key={event.id} className="group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl hover:bg-red-500/5 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-red-500/50 w-full overflow-hidden">
+                {techEvents.map(event => {
+                  const isSoldOut = event.id === 1;
+                  return (
+                  <label key={event.id} className={`group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl transition-all w-full overflow-hidden ${isSoldOut ? 'opacity-60 cursor-not-allowed' : 'hover:bg-red-500/5 cursor-pointer duration-300 hover:scale-[1.02] hover:border-red-500/50'}`}>
                     <input
                       type="checkbox"
+                      disabled={isSoldOut}
                       checked={formData.selectedEvents.some(item => item.id === event.id)}
-                      onChange={() => handleEventSelection(event.id, "event")}
-                      className="w-5 h-5 text-red-600 bg-black/40 border border-red-500/30 rounded focus:ring-red-500/50 focus:ring-offset-black flex-shrink-0 mt-1 cursor-pointer"
+                      onChange={() => !isSoldOut && handleEventSelection(event.id, "event")}
+                      className={`w-5 h-5 text-red-600 bg-black/40 border border-red-500/30 rounded focus:ring-red-500/50 focus:ring-offset-black flex-shrink-0 mt-1 ${isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <span className="text-white font-medium group-hover:text-red-300 transition-colors break-words">{event.title}</span>
-                        {event.maxTeamSize && (
+                        <span className={`font-medium transition-colors break-words ${isSoldOut ? 'text-gray-400' : 'text-white group-hover:text-red-300'}`}>{event.title}</span>
+                        {isSoldOut && (
+                          <span className="text-xs bg-gray-500/20 text-gray-300 px-2 py-1 rounded whitespace-nowrap border border-gray-500/30">
+                            Sold Out
+                          </span>
+                        )}
+                        {!isSoldOut && event.maxTeamSize && (
                           <span className="text-xs bg-red-500/20 text-red-300 px-2 py-1 rounded whitespace-nowrap">
                             {event.maxTeamSize === 1
                               ? "Solo"
@@ -789,7 +797,7 @@ export default function RegistrationForm({
                       </p>
                     </div>
                   </label>
-                ))}
+                )})}
               </div>
             </div>
 
@@ -825,18 +833,26 @@ export default function RegistrationForm({
                 <span className="break-words">// NON_TECHNICAL_EVENTS</span>
               </h4>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-                {nonTechEvents.map(event => (
-                  <label key={event.id} className="group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl hover:bg-red-500/5 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-red-500/50 w-full overflow-hidden">
+                {nonTechEvents.map(event => {
+                  const isSoldOut = event.id === 9 || event.id === 10;
+                  return (
+                  <label key={event.id} className={`group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl transition-all w-full overflow-hidden ${isSoldOut ? 'opacity-60 cursor-not-allowed' : 'hover:bg-red-500/5 cursor-pointer duration-300 hover:scale-[1.02] hover:border-red-500/50'}`}>
                     <input
                       type="checkbox"
+                      disabled={isSoldOut}
                       checked={formData.selectedNonTechEvents.some(item => item.id === event.id)}
-                      onChange={() => handleEventSelection(event.id, "non-tech")}
-                      className="w-5 h-5 text-amber-600 bg-black/40 border border-red-500/30 rounded focus:ring-red-500/50 focus:ring-offset-black flex-shrink-0 mt-1 cursor-pointer"
+                      onChange={() => !isSoldOut && handleEventSelection(event.id, "non-tech")}
+                      className={`w-5 h-5 text-amber-600 bg-black/40 border border-red-500/30 rounded focus:ring-red-500/50 focus:ring-offset-black flex-shrink-0 mt-1 ${isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <span className="text-white font-medium group-hover:text-amber-300 transition-colors break-words">{event.title}</span>
-                        {event.maxTeamSize && (
+                        <span className={`font-medium transition-colors break-words ${isSoldOut ? 'text-gray-400' : 'text-white group-hover:text-amber-300'}`}>{event.title}</span>
+                        {isSoldOut && (
+                          <span className="text-xs bg-gray-500/20 text-gray-300 px-2 py-1 rounded whitespace-nowrap border border-gray-500/30">
+                            Sold Out
+                          </span>
+                        )}
+                        {!isSoldOut && event.maxTeamSize && (
                           <span className="text-xs bg-amber-500/20 text-amber-300 px-2 py-1 rounded whitespace-nowrap">
                             {event.maxTeamSize === 1
                               ? "Solo"
@@ -852,7 +868,7 @@ export default function RegistrationForm({
                       </p>
                     </div>
                   </label>
-                ))}
+                )})}
               </div>
             </div>
           </div>
