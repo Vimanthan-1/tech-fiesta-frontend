@@ -28,7 +28,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
     return date.toLocaleDateString("en-US", options);
   };
 
-  const soldOutEventIds = [1, 9, 10]; // Paper Presentation, Missing Lyrics, Murder Mystery
+  const soldOutEventIds = [1, 3, 5, 9, 10]; // Paper Presentation, UI Challenge, Hack The Campus, Missing Lyrics, Murder Mystery
   const isSoldOutEvent = soldOutEventIds.includes(event.id);
 
   const handleRegisterClick = () => {
