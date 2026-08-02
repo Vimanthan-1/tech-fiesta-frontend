@@ -807,23 +807,33 @@ export default function RegistrationForm({
                 <span className="break-words">// WORKSHOPS</span>
               </h4>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-                {workshops.map(workshop => (
-                  <label key={workshop.id} className="group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl hover:bg-red-500/5 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-red-500/50 w-full overflow-hidden">
+                {workshops.map(workshop => {
+                  const isSoldOut = workshop.id === 2;
+                  return (
+                  <label key={workshop.id} className={`group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl transition-all w-full overflow-hidden ${isSoldOut ? 'opacity-60 cursor-not-allowed' : 'hover:bg-red-500/5 cursor-pointer duration-300 hover:scale-[1.02] hover:border-red-500/50'}`}>
                     <input
                       type="checkbox"
+                      disabled={isSoldOut}
                       checked={formData.selectedWorkshops.some(item => item.id === workshop.id)}
-                      onChange={() => handleEventSelection(workshop.id, "workshop")}
-                      className="w-5 h-5 text-red-600 bg-black/40 border border-red-500/30 rounded focus:ring-red-500/50 focus:ring-offset-black flex-shrink-0 mt-1 cursor-pointer"
+                      onChange={() => !isSoldOut && handleEventSelection(workshop.id, "workshop")}
+                      className={`w-5 h-5 text-red-600 bg-black/40 border border-red-500/30 rounded focus:ring-red-500/50 focus:ring-offset-black flex-shrink-0 mt-1 ${isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     />
                     <div className="flex-1 min-w-0">
-                      <span className="text-white font-medium group-hover:text-red-300 transition-colors block break-words">{workshop.title}</span>
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <span className={`font-medium transition-colors break-words ${isSoldOut ? 'text-gray-400' : 'text-white group-hover:text-red-300'}`}>{workshop.title}</span>
+                        {isSoldOut && (
+                          <span className="text-xs bg-gray-500/20 text-gray-300 px-2 py-1 rounded whitespace-nowrap border border-gray-500/30">
+                            Sold Out
+                          </span>
+                        )}
+                      </div>
                       <p className="text-gray-400 text-sm flex flex-wrap items-center gap-1 mt-1">
                         <MapPin className="w-3 h-3 flex-shrink-0" />
                         <span className="break-words">{workshop.venue}</span>
                       </p>
                     </div>
                   </label>
-                ))}
+                )})}
               </div>
             </div>
 
