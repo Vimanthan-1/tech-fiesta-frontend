@@ -844,7 +844,7 @@ export default function RegistrationForm({
               </h4>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
                 {nonTechEvents.map(event => {
-                  const isSoldOut = event.id === 9 || event.id === 10;
+                  const isSoldOut = event.id === 7 || event.id === 9 || event.id === 10;
                   return (
                   <label key={event.id} className={`group relative flex items-start space-x-3 p-4 bg-black/55 border border-red-500/20 rounded-xl transition-all w-full overflow-hidden ${isSoldOut ? 'opacity-60 cursor-not-allowed' : 'hover:bg-red-500/5 cursor-pointer duration-300 hover:scale-[1.02] hover:border-red-500/50'}`}>
                     <input
