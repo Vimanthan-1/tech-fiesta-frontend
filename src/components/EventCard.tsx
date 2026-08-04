@@ -28,7 +28,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
     return date.toLocaleDateString("en-US", options);
   };
 
-  const soldOutEventIds = [1, 3, 5, 7, 9, 10, 12]; // Paper Presentation, UI Challenge, Hack The Campus, Chess Championship, Missing Lyrics, Murder Mystery, Adzap
+  const soldOutEventIds = [1, 3, 4, 5, 7, 9, 10, 12]; // Paper Presentation, UI Challenge, Common Coding Challenge, Hack The Campus, Chess Championship, Missing Lyrics, Murder Mystery, Adzap
   const isSoldOutEvent = soldOutEventIds.includes(event.id);
 
   const handleRegisterClick = () => {
@@ -186,7 +186,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
                   : "bg-red-600 text-white hover:bg-red-700 shadow-[0_4px_12px_rgba(220,38,38,0.2)] hover:shadow-[0_4px_16px_rgba(220,38,38,0.4)]"
             }`}
           >
-            {isSelected ? "✓ Selected" : "Register Now"}
+            {isSoldOutEvent ? "Sold Out" : isSelected ? "✓ Selected" : "Register Now"}
           </button>
         </div>
       </SpotlightCard>
