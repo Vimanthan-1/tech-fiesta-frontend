@@ -28,8 +28,8 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({ workshop, isSelected = fals
     return date.toLocaleDateString("en-US", options);
   };
 
-  const soldOutWorkshopIds = [2]; // Raspberry Pi
-  const isSoldOutWorkshop = soldOutWorkshopIds.includes(workshop.id);
+  const soldOutWorkshopIds = [1, 2, 3, 4, 5]; 
+  const isSoldOutWorkshop = soldOutWorkshopIds.includes(workshop.id) || (workshop.capacity ? currentRegistrations >= workshop.capacity : false);
 
   const handleEnrollClick = () => {
     if (isSoldOutWorkshop) {

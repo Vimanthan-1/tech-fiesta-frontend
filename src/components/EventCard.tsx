@@ -28,8 +28,8 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
     return date.toLocaleDateString("en-US", options);
   };
 
-  const soldOutEventIds = [1, 3, 4, 5, 7, 9, 10]; // Paper Presentation, UI Challenge, Common Coding Challenge, Hack The Campus, Chess Championship, Missing Lyrics, Murder Mystery
-  const isSoldOutEvent = soldOutEventIds.includes(event.id);
+  const soldOutEventIds = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12];
+  const isSoldOutEvent = soldOutEventIds.includes(event.id) || (event.capacity ? currentRegistrations >= event.capacity : false);
 
   const handleRegisterClick = () => {
     if (isSoldOutEvent) {
