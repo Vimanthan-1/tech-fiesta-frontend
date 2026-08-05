@@ -28,7 +28,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected = false, onSele
     return date.toLocaleDateString("en-US", options);
   };
 
-  const soldOutEventIds = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12];
+  const soldOutEventIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const isSoldOutEvent = soldOutEventIds.includes(event.id) || (event.capacity ? currentRegistrations >= event.capacity : false);
 
   const handleRegisterClick = () => {
