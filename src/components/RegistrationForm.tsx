@@ -1076,9 +1076,7 @@ export default function RegistrationForm({
           </h3>
 
           <p className="mt-2 text-sm text-zinc-500 max-w-sm">
-            Includes <span className="text-zinc-400 font-semibold">any 3 registrations</span>
-            <br />
-            (Events, Workshops or a Mix of both)
+            Includes <span className="text-zinc-400 font-semibold">2-events and 1-workshops</span>
           </p>
 
         </div>
@@ -1118,7 +1116,7 @@ export default function RegistrationForm({
           </p>
 
           <p className="text-xs text-zinc-600">
-            One Pass • Three Registrations
+            One Pass • 2-events and 1-workshops
           </p>
 
         </div>
@@ -1146,12 +1144,11 @@ export default function RegistrationForm({
                 onChange={(e) => handleInputChange("hasConsented", e.target.checked)}
               />
               <div className="text-gray-300 leading-relaxed break-words">
-                <p className="font-medium text-white mb-2 font-mono">// DATA_CONSENT_&_VERIFICATION</p>
-                <p className="text-sm text-gray-400">
-                  I hereby confirm that all the information provided above is <span className="text-red-400 font-medium">accurate and complete</span>. 
-                  I understand that any false information may lead to <span className="text-red-400 font-medium">disqualification</span> from the events. 
-                  I consent to the processing of my personal data for registration and event management purposes in accordance with privacy guidelines.
-                </p>
+                <p className="font-medium text-white mb-2 font-mono">// TERMS_&_CONDITIONS</p>
+                <div className="text-sm text-gray-400 space-y-2">
+                  <p>1. All participants are solely responsible for managing their schedules and ensuring timely attendance for their registered events.</p>
+                  <p>2. No refunds will be provided under any circumstances for missed events, scheduling conflicts, late arrivals, or non-participation.</p>
+                </div>
               </div>
             </label>
           </div>
